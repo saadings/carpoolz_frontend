@@ -2,17 +2,19 @@ import 'package:dio/dio.dart';
 import './base_service.dart';
 
 class UserService extends BaseService {
-  Future<void> getUser(int id) async {
+  Future<Response> login(String userName, String password) async {
     try {
-      final response = await dio.post('/', data: {});
-      print(response.data['title']);
+      final response = await dio.post('/users/login', data: {
+        'userName': userName,
+        'password': password,
+      });
+      // print(response.data);
 
-      // return response.data;
-      // return User.fromJson(response.data);
-    } on DioError catch (e) {
-      throw e.message;
+      return response;
+    } on DioError catch (_) {
+      rethrow;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../screens/login_screen.dart';
 
 class RegisterForm extends StatefulWidget {
+  const RegisterForm({Key? key}) : super(key: key);
+
   @override
   State<RegisterForm> createState() => _RegisterFormState();
 }
@@ -61,13 +63,13 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _saveForm() {
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
 
     // _form.currentState.validate();
-    _form.currentState.save();
+    _form.currentState!.save();
   }
 
   @override
@@ -86,7 +88,7 @@ class _RegisterFormState extends State<RegisterForm> {
               FocusScope.of(context).requestFocus(_emailFocusNode);
             },
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter a username';
               }
               if (value.length < 8) {
@@ -108,7 +110,7 @@ class _RegisterFormState extends State<RegisterForm> {
               FocusScope.of(context).requestFocus(_firstNameFocusNode);
             },
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter an email';
               }
               if (!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
@@ -130,7 +132,7 @@ class _RegisterFormState extends State<RegisterForm> {
               FocusScope.of(context).requestFocus(_lastNameFocusNode);
             },
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter your first name';
               }
               return null;
@@ -148,7 +150,7 @@ class _RegisterFormState extends State<RegisterForm> {
               FocusScope.of(context).requestFocus(_passwordFocusNode);
             },
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter your last name';
               }
               return null;
@@ -168,7 +170,7 @@ class _RegisterFormState extends State<RegisterForm> {
               FocusScope.of(context).requestFocus(_confirmPasswordFocusNode);
             },
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter a password';
               }
               if (value.length < 8) {
@@ -198,11 +200,11 @@ class _RegisterFormState extends State<RegisterForm> {
             obscureText: true,
             focusNode: _confirmPasswordFocusNode,
             onFieldSubmitted: (_) {
-              _form.currentState.validate();
+              _form.currentState!.validate();
               FocusScope.of(context).requestFocus(_buttonFocusNode);
             },
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please confirm your password';
               }
               if (value != _passwordController.text) {
@@ -233,7 +235,7 @@ class _RegisterFormState extends State<RegisterForm> {
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text("Have an account?", textAlign: TextAlign.center),
-              SizedBox(
+              const SizedBox(
                 width: 1,
               ),
               TextButton(
