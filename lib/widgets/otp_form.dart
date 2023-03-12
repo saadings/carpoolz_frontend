@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +23,51 @@ class _OtpFormState extends State<OtpForm> {
   };
   final FocusNode _buttonFocusNode = FocusNode();
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
+
+  int _timeRemaining = 10 * 60; // 10 minutes in seconds
+  bool _timerRunning = false;
+  Timer? _timer;
+
+  void _startTimer() {
+    setState(() {
+      _timerRunning = true;
+    });
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_timeRemaining > 0) {
+          _timeRemaining--;
+        } else {
+          _stopTimer();
+        }
+      });
+    });
+  }
+
+  void _stopTimer() {
+    setState(() {
+      _timerRunning = false;
+    });
+
+    _timer?.cancel();
+    _timer = null;
+
+    setState(() {
+      _timeRemaining = 10 * 60;
+    });
+  }
+
+  String _formatTime(int seconds) {
+    int minutes = seconds ~/ 60;
+    int remainingSeconds = seconds % 60;
+    return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+
+  @override
+  void initState() {
+    _startTimer();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -89,7 +136,7 @@ class _OtpFormState extends State<OtpForm> {
         children: [
           TextFormField(
             decoration: const InputDecoration(
-              labelText: "otp",
+              labelText: "OTP",
             ),
             maxLength: 6,
             initialValue: _initValue['otp'],
@@ -113,6 +160,9 @@ class _OtpFormState extends State<OtpForm> {
               return null;
             },
           ),
+          // Text(
+          //   _formatTime(_timeRemaining),
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             // crossAxisAlignment: CrossAxisAlignment.center,
@@ -125,14 +175,16 @@ class _OtpFormState extends State<OtpForm> {
                 width: 1,
               ),
               TextButton(
-                onPressed: () {
-                  // Navigator.of(context)
-                  //     .pushReplacementNamed(RegisterScreen.routeName);
-                },
-                child: const Text(
-                  "Resend OTP",
+                onPressed: _timerRunning ? null : _startTimer,
+                // Navigator.of(context)
+                //     .pushReplacementNamed(RegisterScreen.routeName);
+
+                child: Text(
+                  _timerRunning
+                      ? "Resend in:  ${_formatTime(_timeRemaining)}"
+                      : "Resend OTP",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w500),
+                  style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
               ),
             ],
