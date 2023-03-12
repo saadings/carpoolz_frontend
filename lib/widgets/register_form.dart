@@ -1,5 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/user_provider.dart';
+import '../widgets/small_loading.dart';
+import '../screens/otp_screen.dart';
 import '../screens/login_screen.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -10,27 +15,25 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  var _initValue = {
+  var _isLoading = false;
+  final Map<String, dynamic> _initValue = {
     'userName': '',
     'email': '',
     'firstName': '',
     'lastName': '',
     'password': '',
+    'contactNumber': '',
+    'gender': Gender.male,
   };
-  Map<String, dynamic> _registerData = {
-    'userName': '',
-    'email': '',
-    'firstName': '',
-    'lastName': '',
-    'password': '',
-  };
-  var _passwordController = TextEditingController();
-  var _emailFocusNode = FocusNode();
-  var _firstNameFocusNode = FocusNode();
-  var _lastNameFocusNode = FocusNode();
-  var _passwordFocusNode = FocusNode();
-  var _confirmPasswordFocusNode = FocusNode();
-  var _buttonFocusNode = FocusNode();
+  final _passwordController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _firstNameFocusNode = FocusNode();
+  final _lastNameFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+  final _confirmPasswordFocusNode = FocusNode();
+  final _contactNumberFocusNode = FocusNode();
+  final _genderFocusNode = FocusNode();
+  final _buttonFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
 
   @override
@@ -41,35 +44,69 @@ class _RegisterFormState extends State<RegisterForm> {
     _lastNameFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
+    _contactNumberFocusNode.dispose();
+    _genderFocusNode.dispose();
     _buttonFocusNode.dispose();
 
     super.dispose();
   }
 
-  bool _containsUppercase(String value) {
-    return RegExp(r'[A-Z]').hasMatch(value);
+  String? _validateGender(Gender? value) {
+    return value == null ? 'Please select a gender' : null;
   }
 
-  bool _containsLowercase(String value) {
-    return RegExp(r'[a-z]').hasMatch(value);
+  Future<void> _showDialog(String title, String content) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: const Text("Okay"),
+          ),
+        ],
+      ),
+    );
   }
 
-  bool _containsNumber(String value) {
-    return RegExp(r'\d').hasMatch(value);
-  }
-
-  bool _containsSpecialCharacter(String value) {
-    return RegExp(r'[@$!%*?&.]').hasMatch(value);
-  }
-
-  void _saveForm() {
+  Future<void> _submitForm() async {
     final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
 
-    // _form.currentState.validate();
+    setState(() {
+      _isLoading = true;
+    });
+
     _form.currentState!.save();
+
+    try {
+      await Provider.of<UserProvider>(context, listen: false).register(
+        _initValue["userName"],
+        _initValue["email"],
+        _initValue["firstName"],
+        _initValue["lastName"],
+        _initValue["contactNumber"],
+        _initValue["gender"],
+        _initValue["password"],
+      );
+
+      await _showDialog("User Registered Successfully",
+          "An OTP has been sent to your email address. Please verify your account before logging in.");
+
+      Navigator.of(context).pushReplacementNamed(OtpScreen.routeName);
+    } on DioError catch (e) {
+      await _showDialog("An Error Occurred", e.response!.data['message']);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -97,7 +134,7 @@ class _RegisterFormState extends State<RegisterForm> {
               return null;
             },
             onSaved: (value) {
-              _registerData['userName'] = value;
+              _initValue['userName'] = value;
             },
           ),
           TextFormField(
@@ -120,7 +157,7 @@ class _RegisterFormState extends State<RegisterForm> {
               return null;
             },
             onSaved: (value) {
-              _registerData['email'] = value;
+              _initValue['email'] = value;
             },
           ),
           TextFormField(
@@ -138,7 +175,7 @@ class _RegisterFormState extends State<RegisterForm> {
               return null;
             },
             onSaved: (value) {
-              _registerData['firstName'] = value;
+              _initValue['firstName'] = value;
             },
           ),
           TextFormField(
@@ -156,7 +193,7 @@ class _RegisterFormState extends State<RegisterForm> {
               return null;
             },
             onSaved: (value) {
-              _registerData['lastName'] = value;
+              _initValue['lastName'] = value;
             },
           ),
           TextFormField(
@@ -173,35 +210,51 @@ class _RegisterFormState extends State<RegisterForm> {
               if (value!.isEmpty) {
                 return 'Please enter a password';
               }
+
               if (value.length < 8) {
                 return 'Password must be at least 8 characters';
               }
-              if (!_containsUppercase(value)) {
-                return 'Password must contain at least one uppercase letter';
-              }
-              if (!_containsLowercase(value)) {
+
+              // At least one lowercase letter
+              if (!RegExp(r'[a-z]').hasMatch(value)) {
                 return 'Password must contain at least one lowercase letter';
               }
-              if (!_containsNumber(value)) {
+
+              // At least one uppercase letter
+              if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                return 'Password must contain at least one uppercase letter';
+              }
+
+              // At least one digit
+              if (!RegExp(r'\d').hasMatch(value)) {
                 return 'Password must contain at least one number';
               }
-              if (!_containsSpecialCharacter(value)) {
+
+              // At least one special character
+              if (!RegExp(r'[^\w\s]').hasMatch(value)) {
                 return 'Password must contain at least one special character';
               }
+
+              // No whitespace or newline characters
+              if (RegExp(r'[\s\n]').hasMatch(value)) {
+                return 'Password must not contain whitespace or newline characters';
+              }
+
+              // All conditions passed, so password is valid
               return null;
             },
             onSaved: (value) {
-              _registerData['password'] = value;
+              _initValue['password'] = value;
             },
           ),
           TextFormField(
             decoration: const InputDecoration(labelText: "Confirm Password"),
-            textInputAction: TextInputAction.done,
+            textInputAction: TextInputAction.next,
             obscureText: true,
             focusNode: _confirmPasswordFocusNode,
             onFieldSubmitted: (_) {
               _form.currentState!.validate();
-              FocusScope.of(context).requestFocus(_buttonFocusNode);
+              FocusScope.of(context).requestFocus(_contactNumberFocusNode);
             },
             validator: (value) {
               if (value!.isEmpty) {
@@ -213,6 +266,57 @@ class _RegisterFormState extends State<RegisterForm> {
               return null;
             },
           ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: "Contact Number"),
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.phone,
+            focusNode: _contactNumberFocusNode,
+            onSaved: (newValue) => _initValue['contactNumber'] = newValue,
+            onFieldSubmitted: (_) {
+              FocusScope.of(context).requestFocus(_genderFocusNode);
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a contact number';
+              }
+              final phoneNumberRegex = RegExp(r'^\+?[0-9]{6,14}$');
+              if (!phoneNumberRegex.hasMatch(value)) {
+                return 'Please enter a valid contact number';
+              }
+
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          const Text(
+            'Gender',
+            style: TextStyle(color: Colors.white60),
+          ),
+          DropdownButtonFormField<Gender>(
+            focusNode: _genderFocusNode,
+            value: _initValue['gender'],
+            onChanged: (Gender? value) {
+              setState(() {
+                _initValue['gender'] = value;
+              });
+            },
+            onSaved: (_) {
+              FocusScope.of(context).requestFocus(_buttonFocusNode);
+            },
+            validator: (value) => _validateGender(value),
+            items: const [
+              DropdownMenuItem<Gender>(
+                value: Gender.male,
+                child: Text('Male'),
+              ),
+              DropdownMenuItem<Gender>(
+                value: Gender.female,
+                child: Text('Female'),
+              ),
+            ],
+          ),
           const SizedBox(
             height: 20,
           ),
@@ -220,11 +324,13 @@ class _RegisterFormState extends State<RegisterForm> {
             padding: EdgeInsets.symmetric(horizontal: deviceSize.width * 0.15),
             child: ElevatedButton(
               focusNode: _buttonFocusNode,
-              onPressed: _saveForm,
-              child: Text(
-                "Register",
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              onPressed: _isLoading ? null : _submitForm,
+              child: _isLoading
+                  ? const SmallLoading()
+                  : Text(
+                      "Register",
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
             ),
           ),
           const SizedBox(

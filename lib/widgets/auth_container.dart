@@ -16,6 +16,7 @@ class AuthContainer extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        elevation: 15,
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -14,14 +14,14 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  Map<String, dynamic> _initValue = {
+  final Map<String, dynamic> _initValue = {
     'userName': '',
     'password': '',
   };
   var _isLoading = false;
 
-  var _passwordFocusNode = FocusNode();
-  var _buttonFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+  final _buttonFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
 
   @override
@@ -35,7 +35,7 @@ class _LoginFormState extends State<LoginForm> {
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("An error occurred!"),
+        title: const Text("An Error Occurred!"),
         content: Text(message),
         actions: [
           TextButton(
