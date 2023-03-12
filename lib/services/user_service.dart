@@ -56,4 +56,16 @@ class UserService extends BaseService {
       rethrow;
     }
   }
+
+  Future<void> resendOtp(String userName) async {
+    try {
+      await dio.post('/users/resend/otp', data: {
+        'userName': userName,
+      });
+    } on DioError catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

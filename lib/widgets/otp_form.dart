@@ -18,6 +18,7 @@ class OtpForm extends StatefulWidget {
 
 class _OtpFormState extends State<OtpForm> {
   var _isLoading = false;
+  var _isLoadingOtp = false;
   final Map<String, dynamic> _initValue = {
     'otp': '',
   };
@@ -72,6 +73,8 @@ class _OtpFormState extends State<OtpForm> {
   @override
   void dispose() {
     _buttonFocusNode.dispose();
+    _timer?.cancel();
+
     super.dispose();
   }
 
@@ -91,6 +94,25 @@ class _OtpFormState extends State<OtpForm> {
         ],
       ),
     );
+  }
+
+  Future<void> _resendOtp() async {
+    setState(() {
+      _isLoadingOtp = true;
+    });
+
+    try {
+      await Provider.of<UserProvider>(context, listen: false).resendOtp();
+      await _showDialog("OTP Sent", "OTP sent successfully");
+    } on DioError catch (e) {
+      await _showDialog("OTP Sending Failed", e.response!.data['message']);
+    } catch (e) {
+      await _showDialog("An Error Occurred", "Something went wrong");
+    } finally {
+      setState(() {
+        _isLoadingOtp = false;
+      });
+    }
   }
 
   Future<void> _submitForm() async {
@@ -168,24 +190,30 @@ class _OtpFormState extends State<OtpForm> {
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Didn't receive the OTP?",
+                "Didn't receive an OTP?",
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
                 width: 1,
               ),
               TextButton(
-                onPressed: _timerRunning ? null : _startTimer,
+                onPressed: _timerRunning
+                    ? null
+                    : () {
+                        _startTimer();
+                      },
                 // Navigator.of(context)
                 //     .pushReplacementNamed(RegisterScreen.routeName);
 
-                child: Text(
-                  _timerRunning
-                      ? "Resend in:  ${_formatTime(_timeRemaining)}"
-                      : "Resend OTP",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
+                child: _isLoadingOtp
+                    ? const SmallLoading()
+                    : Text(
+                        _timerRunning
+                            ? "Resend in:  ${_formatTime(_timeRemaining)}"
+                            : "Resend OTP",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
               ),
             ],
           ),

@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: const LoginScreen(),
+        // home: const OtpScreen(),
         routes: {
           RegisterScreen.routeName: (ctx) => const RegisterScreen(),
           OtpScreen.routeName: (ctx) => const OtpScreen(),

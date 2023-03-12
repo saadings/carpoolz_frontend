@@ -113,4 +113,16 @@ class UserProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> resendOtp() async {
+    try {
+      await UserService().resendOtp(
+        userName.toLowerCase(),
+      );
+
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
