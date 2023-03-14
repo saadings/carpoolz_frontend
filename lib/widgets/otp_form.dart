@@ -25,7 +25,7 @@ class _OtpFormState extends State<OtpForm> {
   final FocusNode _buttonFocusNode = FocusNode();
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
 
-  int _timeRemaining = 1 * 60; // 10 minutes in seconds
+  int _timeRemaining = 1 * 60; // 1 minutes in seconds
   bool _timerRunning = false;
   Timer? _timer;
 
