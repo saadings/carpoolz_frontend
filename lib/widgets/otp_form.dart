@@ -25,7 +25,7 @@ class _OtpFormState extends State<OtpForm> {
   final FocusNode _buttonFocusNode = FocusNode();
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
 
-  int _timeRemaining = 10 * 60; // 10 minutes in seconds
+  int _timeRemaining = 1 * 60; // 10 minutes in seconds
   bool _timerRunning = false;
   Timer? _timer;
 
@@ -54,7 +54,7 @@ class _OtpFormState extends State<OtpForm> {
     _timer = null;
 
     setState(() {
-      _timeRemaining = 10 * 60;
+      _timeRemaining = 1 * 60;
     });
   }
 
@@ -135,10 +135,10 @@ class _OtpFormState extends State<OtpForm> {
       );
       await _showDialog(
           "User Verified Successfully", "Please Login to use the app");
+      Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
     } on DioError catch (e) {
       await _showDialog(
           "User Verification Failed", e.response!.data['message']);
-      Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
     } catch (e) {
       await _showDialog("An Error Occurred", "Something went wrong");
     } finally {
@@ -200,6 +200,7 @@ class _OtpFormState extends State<OtpForm> {
                 onPressed: _timerRunning
                     ? null
                     : () {
+                        _resendOtp();
                         _startTimer();
                       },
                 // Navigator.of(context)
