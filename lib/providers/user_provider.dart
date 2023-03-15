@@ -79,6 +79,17 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future<void> registerDriver(String cnic, String licenseNo) async {
+    try {
+      await UserService()
+          .registerDriver(_userName.toLowerCase(), cnic, licenseNo);
+
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> login(String userName, String password) async {
     _userName = userName.toLowerCase();
     _password = password;

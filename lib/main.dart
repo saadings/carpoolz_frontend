@@ -5,6 +5,7 @@ import './providers/user_provider.dart';
 
 import './screens/login_screen.dart';
 import './screens/register_screen.dart';
+import './screens/register_driver_screen.dart';
 import './screens/otp_screen.dart';
 
 void main() {
@@ -51,9 +52,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: const LoginScreen(),
-        // home: const OtpScreen(),
+        // home: const RegisterDriverScreen(),
         routes: {
           RegisterScreen.routeName: (ctx) => const RegisterScreen(),
+          RegisterDriverScreen.routeName: (ctx) => const RegisterDriverScreen(),
           OtpScreen.routeName: (ctx) => const OtpScreen(),
         },
       ),
