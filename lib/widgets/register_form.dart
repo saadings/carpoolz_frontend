@@ -16,6 +16,8 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   var _isLoading = false;
+  var _obscurePassword = true;
+  var _obscurePassword2 = true;
   final Map<String, dynamic> _initValue = {
     'userName': '',
     'email': '',
@@ -197,10 +199,23 @@ class _RegisterFormState extends State<RegisterForm> {
             },
           ),
           TextFormField(
-            decoration: const InputDecoration(labelText: "Password"),
+            decoration: InputDecoration(
+              labelText: "Password",
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+                child: Icon(
+                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  size: 20,
+                ),
+              ),
+            ),
             // initialValue: _initValue['password'],
             textInputAction: TextInputAction.next,
-            obscureText: true,
+            obscureText: _obscurePassword,
             focusNode: _passwordFocusNode,
             controller: _passwordController,
             onFieldSubmitted: (_) {
@@ -248,9 +263,22 @@ class _RegisterFormState extends State<RegisterForm> {
             },
           ),
           TextFormField(
-            decoration: const InputDecoration(labelText: "Confirm Password"),
+            decoration: InputDecoration(
+              labelText: "Confirm Password",
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscurePassword2 = !_obscurePassword2;
+                  });
+                },
+                child: Icon(
+                  _obscurePassword2 ? Icons.visibility : Icons.visibility_off,
+                  size: 20,
+                ),
+              ),
+            ),
             textInputAction: TextInputAction.next,
-            obscureText: true,
+            obscureText: _obscurePassword2,
             focusNode: _confirmPasswordFocusNode,
             onFieldSubmitted: (_) {
               _form.currentState!.validate();

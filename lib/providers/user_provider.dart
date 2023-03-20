@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../services/user_service.dart';
+import '../services/api_services/user_service.dart';
+import '../services/local_storage_services/access_token_service.dart';
 
 enum Gender { male, female }
 
@@ -24,22 +24,6 @@ class UserProvider with ChangeNotifier {
   // );
 
   String get userName => _userName;
-
-  Future<void> storeToken(String key, String value) async {
-    AndroidOptions getAndroidOptions() => const AndroidOptions(
-          encryptedSharedPreferences: true,
-        );
-    final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
-    await storage.write(key: key, value: value);
-  }
-
-  Future<String?> getToken(String key) async {
-    AndroidOptions getAndroidOptions() => const AndroidOptions(
-          encryptedSharedPreferences: true,
-        );
-    final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
-    return await storage.read(key: key);
-  }
 
   Future<void> register(
     String userName,
@@ -81,8 +65,11 @@ class UserProvider with ChangeNotifier {
 
   Future<void> registerDriver(String cnic, String licenseNo) async {
     try {
-      await UserService()
-          .registerDriver(_userName.toLowerCase(), cnic, licenseNo);
+      await UserService().registerDriver(
+        _userName.toLowerCase(),
+        cnic,
+        licenseNo,
+      );
 
       notifyListeners();
     } catch (e) {
@@ -101,8 +88,14 @@ class UserProvider with ChangeNotifier {
       );
       _accessToken = response.data['accessToken'];
       _refreshToken = response.data['refreshToken'];
-      await storeToken('accessToken', _accessToken);
-      await storeToken('refreshToken', _refreshToken);
+      await AccessTokenService().storeToken(
+        AccessTokenService.accessTokenKey,
+        response.data['accessToken'],
+      );
+      await AccessTokenService().storeToken(
+        AccessTokenService.refreshTokenKey,
+        response.data['refreshToken'],
+      );
 
       notifyListeners();
     } catch (e) {

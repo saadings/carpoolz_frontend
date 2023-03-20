@@ -99,7 +99,7 @@ class RegisterDriverFormState extends State<RegisterDriverForm> {
               if (value!.isEmpty) {
                 return 'Please enter your CNIC';
               }
-              if (!RegExp(r'^\+?[0-9]{6,14}$').hasMatch(value)) {
+              if (!RegExp(r'^\d+$').hasMatch(value)) {
                 return 'Please enter a valid CNIC';
               }
               return null;
@@ -121,7 +121,7 @@ class RegisterDriverFormState extends State<RegisterDriverForm> {
               if (value!.isEmpty) {
                 return 'Please enter your license number';
               }
-              if (!RegExp(r'^\+?[0-9]{6,14}$').hasMatch(value)) {
+              if (!RegExp(r'[^-]+').hasMatch(value)) {
                 return 'Please enter a valid license number';
               }
               return null;

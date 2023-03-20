@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+
 import './base_service.dart';
+import '../local_storage_services/access_token_service.dart';
 
 class UserService extends BaseService {
   Future<void> register(
@@ -34,8 +36,10 @@ class UserService extends BaseService {
     String licenseNo,
   ) async {
     try {
-      await dio.post('/drivers/register',
-          data: {"userName": userName, "cnic": cnic, "licenseNo": licenseNo});
+      await dio.post(
+        '/drivers/register',
+        data: {"userName": userName, "cnic": cnic, "licenseNo": licenseNo},
+      );
     } on DioError catch (_) {
       rethrow;
     } catch (e) {

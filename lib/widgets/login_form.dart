@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
 import '../screens/register_screen.dart';
+import '../screens/register_driver_screen.dart';
 import './small_loading.dart';
 
 class LoginForm extends StatefulWidget {
@@ -19,7 +20,7 @@ class _LoginFormState extends State<LoginForm> {
     'password': '',
   };
   var _isLoading = false;
-
+  var _obscurePassword = true;
   final _passwordFocusNode = FocusNode();
   final _buttonFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
@@ -63,6 +64,8 @@ class _LoginFormState extends State<LoginForm> {
     try {
       await Provider.of<UserProvider>(context, listen: false)
           .login(_initValue['userName'], _initValue['password']);
+      Navigator.of(context)
+          .pushReplacementNamed(RegisterDriverScreen.routeName);
     } on DioError catch (e) {
       await _showErrorDialog(e.response!.data['message']);
     } catch (e) {
@@ -101,9 +104,20 @@ class _LoginFormState extends State<LoginForm> {
             },
           ),
           TextFormField(
-            obscureText: true,
-            decoration: const InputDecoration(
+            obscureText: _obscurePassword,
+            decoration: InputDecoration(
               labelText: "Password",
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+                child: Icon(
+                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  size: 20,
+                ),
+              ),
             ),
             initialValue: _initValue['password'],
             textInputAction: TextInputAction.done,
