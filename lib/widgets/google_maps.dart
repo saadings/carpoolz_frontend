@@ -39,6 +39,10 @@ class _GoogleMapsState extends State<GoogleMaps> {
       context,
     ).markers;
 
+    final List<LatLng> _polylineCoordinates = Provider.of<GoogleMapsProvider>(
+      context,
+    ).polylineCoordinates;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -73,6 +77,15 @@ class _GoogleMapsState extends State<GoogleMaps> {
                       compassEnabled: false,
                       rotateGesturesEnabled: true,
                       // buildingsEnabled: true,
+                      polylines: Set<Polyline>.from([
+                        Polyline(
+                          polylineId: PolylineId("1"),
+                          color: Colors.purple,
+                          points: _polylineCoordinates,
+                          onTap: () {},
+                          width: 4,
+                        ),
+                      ]),
                       initialCameraPosition: CameraPosition(
                         target: LatLng(_currentPosition.latitude,
                             _currentPosition.longitude),

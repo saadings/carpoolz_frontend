@@ -2,7 +2,10 @@
   "cSpell.words": [
     "cnic",
     "Geolocator",
+    "googleapis",
     "ipbias",
-    "Locationbias"
+    "Locationbias",
+    "Polyline",
+    "polylines"
   ]
 }

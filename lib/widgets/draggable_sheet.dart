@@ -1,4 +1,6 @@
+import 'package:carpoolz_frontend/providers/google_maps_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/google_auto_complete.dart';
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +17,8 @@ class GoogleAutoComplete extends StatefulWidget {
 class _GoogleAutoCompleteState extends State<GoogleAutoComplete> {
   late GooglePlace googlePlace;
   String apiKey = 'AIzaSyAXD-Jtq7KNo93Sw7lEdidS-J5zX6NjTrs';
+  bool _sendRequest = true;
+  // Timer? _debounce;
 
   @override
   void initState() {
@@ -70,13 +74,22 @@ class _GoogleAutoCompleteState extends State<GoogleAutoComplete> {
           ),
         );
       },
-      onSelected: (GoogleMapsModel selection) {
+      onSelected: (GoogleMapsModel selection) async {
         // When the user selects a search result, update the text field with the selection
         // _destinationController.text = selection;
-        Provider.of<GoogleMapsProvider>(context, listen: false).addMarker(
+        await Provider.of<GoogleMapsProvider>(context, listen: false).addMarker(
           selection,
           googlePlace,
         );
+
+        // try {
+        await Provider.of<GoogleMapsProvider>(
+          context,
+          listen: false,
+        ).getRoutes();
+        // } catch (e) {
+        //   print(e);
+        // }
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -109,25 +122,36 @@ class _GoogleAutoCompleteState extends State<GoogleAutoComplete> {
           return const Iterable<GoogleMapsModel>.empty();
         }
 
-        // if (_debounce?.isActive ?? false)
-        //   _debounce?.cancel();
-        // List<String> options = [];
+        // if (_debounce?.isActive ?? false) _debounce?.cancel();
+
+        // List<GoogleMapsModel> _options = [];
+
         // _debounce = Timer(
         //   const Duration(milliseconds: 1000),
-        //   () async {
-        //     options = await _autoCompleteSearch(
+        //   await () async {
+        //     _options =
+        //         await Provider.of<GoogleMapsProvider>(context, listen: false)
+        //             .autoCompleteSearch(
         //       textEditingValue.text,
+        //       googlePlace,
+        //       mounted,
         //     );
-        //     setState(() {});
         //   },
         // );
         // return await options;
-        return await Provider.of<GoogleMapsProvider>(context, listen: false)
-            .autoCompleteSearch(
-          textEditingValue.text,
-          googlePlace,
-          mounted,
-        );
+
+        if (_sendRequest) {
+          return await Provider.of<GoogleMapsProvider>(context, listen: false)
+              .autoCompleteSearch(
+            textEditingValue.text,
+            googlePlace,
+            mounted,
+          );
+        }
+        _sendRequest = !_sendRequest;
+        return const Iterable<GoogleMapsModel>.empty();
+
+        // return _options;
       },
       displayStringForOption: (GoogleMapsModel option) => option.description,
     );
