@@ -32,9 +32,28 @@ class RideService extends BaseService {
     }
   }
 
-  Future<Response> getRidesPassenger() async {
+  Future<Response> getRidesPassenger(
+    String userName,
+    LatLng origin,
+    LatLng destination,
+    var route,
+  ) async {
     try {
-      return await dio.get('/activate/passenger');
+      return await dio.post(
+        '/activate/passenger',
+        data: {
+          'userName': userName,
+          'origin': {
+            'latitude': origin.latitude,
+            'longitude': origin.longitude,
+          },
+          'destination': {
+            'latitude': destination.latitude,
+            'longitude': destination.longitude,
+          },
+          'route': route,
+        },
+      );
     } on DioError catch (_) {
       rethrow;
     } catch (e) {

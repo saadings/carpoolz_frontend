@@ -15,7 +15,7 @@ class UserProvider with ChangeNotifier {
   String _lastName = "";
   String _contactNumber = "";
   Gender? _gender = null;
-  double _rating = 0.0;
+  int _rating = 0;
   bool _active = false;
   List<Type>? _types = [];
 

@@ -24,8 +24,8 @@ class DioClient {
               final accessToken = await AccessTokenService()
                   .getToken(AccessTokenService.accessTokenKey);
               options.headers['Authorization'] = 'Bearer $accessToken';
-              print(
-                  "Token added + ${options.headers['Authorization'].toString()}");
+              // print(
+              //     "Token added + ${options.headers['Authorization'].toString()}");
             }
 
             handler.next(options);
