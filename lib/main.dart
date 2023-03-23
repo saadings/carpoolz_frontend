@@ -33,8 +33,10 @@ class MyApp extends StatelessWidget {
           update: (ctx, user, previousState) =>
               DriverProvider(userName: user.userName),
         ),
-        ChangeNotifierProvider(
-          create: (_) => GoogleMapsProvider(),
+        ChangeNotifierProxyProvider<UserProvider, GoogleMapsProvider>(
+          create: (_) => GoogleMapsProvider(userName: ""),
+          update: (ctx, user, previousState) =>
+              GoogleMapsProvider(userName: user.userName),
         ),
       ],
       child: MaterialApp(

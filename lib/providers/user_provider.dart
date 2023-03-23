@@ -6,6 +6,8 @@ import '../services/local_storage_services/access_token_service.dart';
 
 enum Gender { male, female }
 
+enum Type { driver, vendor }
+
 class UserProvider with ChangeNotifier {
   String _userName = "";
   String _email = "";
@@ -13,6 +15,10 @@ class UserProvider with ChangeNotifier {
   String _lastName = "";
   String _contactNumber = "";
   Gender? _gender = null;
+  double _rating = 0.0;
+  bool _active = false;
+  List<Type>? _types = [];
+
   String _accessToken = "";
   String _refreshToken = "";
 
@@ -101,7 +107,19 @@ class UserProvider with ChangeNotifier {
       _accessToken = response.data['accessToken'];
       _refreshToken = response.data['refreshToken'];
 
-      // _userName = userName.toLowerCase();
+      final data = response.data['data'];
+      _userName = data['userName'];
+      _email = data['email'];
+      _firstName = data['firstName'];
+      _lastName = data['lastName'];
+      _contactNumber = data['contactNumber'];
+      _gender = data['gender'] == "Male" ? Gender.male : Gender.female;
+      _rating = data['rating'];
+      _active = data['active'];
+      _types = data['types']
+          .map<Type>((e) => e == "Driver" ? Type.driver : Type.vendor)
+          .toList();
+
       notifyListeners();
     } catch (e) {
       rethrow;

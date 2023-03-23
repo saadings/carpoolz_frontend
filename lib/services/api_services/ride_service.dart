@@ -10,7 +10,21 @@ class RideService extends BaseService {
     var route,
   ) async {
     try {
-      return await dio.post('/active/driver');
+      return await dio.post(
+        '/activate/driver',
+        data: {
+          'userName': userName,
+          'origin': {
+            'latitude': origin.latitude,
+            'longitude': origin.longitude,
+          },
+          'destination': {
+            'latitude': destination.latitude,
+            'longitude': destination.longitude,
+          },
+          'route': route,
+        },
+      );
     } on DioError catch (_) {
       rethrow;
     } catch (e) {
@@ -20,7 +34,7 @@ class RideService extends BaseService {
 
   Future<Response> getRidesPassenger() async {
     try {
-      return await dio.get('/active/passenger');
+      return await dio.get('/activate/passenger');
     } on DioError catch (_) {
       rethrow;
     } catch (e) {

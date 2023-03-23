@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/services/api_services/ride_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,11 +10,16 @@ import '../models/google_maps.dart';
 import '../services/api_services/google_service.dart';
 
 class GoogleMapsProvider with ChangeNotifier {
+  String userName = "";
   GoogleMapController? _mapController = null;
   Position? _currentPosition = null;
   List<Marker> _markers = [];
   List<LatLng> _polylineCoordinates = [];
   var _route = null;
+
+  GoogleMapsProvider({
+    required this.userName,
+  });
 
   GoogleMapController? get mapController => _mapController;
   Position? get currentPosition => _currentPosition;
@@ -125,5 +131,20 @@ class GoogleMapsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> findRides() async {}
+  Future<void> findRidesDriver() async {
+    try {
+      final Response response = await RideService().getRidesDriver(
+        userName,
+        LatLng(
+          _currentPosition!.latitude,
+          _currentPosition!.longitude,
+        ),
+        _markers[0].position,
+        _route,
+      );
+      print(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

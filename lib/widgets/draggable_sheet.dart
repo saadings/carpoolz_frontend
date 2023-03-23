@@ -1,7 +1,7 @@
-import 'package:carpoolz_frontend/providers/google_maps_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/google_maps_provider.dart';
 import '../widgets/google_auto_complete.dart';
 
 class DraggableSheet extends StatelessWidget {
@@ -32,7 +32,15 @@ class DraggableSheet extends StatelessWidget {
                 GoogleAutoComplete(),
                 const SizedBox(height: 5),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      await Provider.of<GoogleMapsProvider>(context,
+                              listen: false)
+                          .findRidesDriver();
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
