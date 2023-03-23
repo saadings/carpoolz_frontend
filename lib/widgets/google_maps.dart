@@ -74,8 +74,8 @@ class _GoogleMapsState extends State<GoogleMaps> {
                       rotateGesturesEnabled: true,
                       // buildingsEnabled: true,
                       initialCameraPosition: CameraPosition(
-                        target: LatLng(_currentPosition!.latitude,
-                            _currentPosition!.longitude),
+                        target: LatLng(_currentPosition.latitude,
+                            _currentPosition.longitude),
                         zoom: 18,
                       ),
                       onMapCreated: (GoogleMapController controller) {
