@@ -11,7 +11,7 @@ import './screens/register_screen.dart';
 import './screens/register_driver_screen.dart';
 import './screens/otp_screen.dart';
 import './screens/home_screen.dart';
-import 'screens/ride_requests_screen.dart';
+import './screens/ride_requests_screen.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -38,6 +38,12 @@ class MyApp extends StatelessWidget {
           create: (_) => GoogleMapsProvider(userName: ""),
           update: (ctx, user, previousState) =>
               GoogleMapsProvider(userName: user.userName),
+        ),
+        ChangeNotifierProxyProvider<UserProvider, DriverProvider>(
+          create: (_) => DriverProvider(userName: ""),
+          update: (context, value, previous) => DriverProvider(
+            userName: value.userName,
+          ),
         ),
       ],
       child: MaterialApp(

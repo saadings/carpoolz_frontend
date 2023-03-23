@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/ride_requests.dart';
 
 class RideRequestsScreen extends StatelessWidget {
-  static const String routeName = '/ride-users';
+  static const String routeName = '/ride-requests';
 
   const RideRequestsScreen({super.key});
 
@@ -11,7 +11,7 @@ class RideRequestsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ride Users'),
+        title: Text('Ride Requests'),
       ),
       body: RideRequests(),
     );
