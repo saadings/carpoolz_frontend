@@ -3,14 +3,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import './providers/user_provider.dart';
-import '../providers/driver_provider.dart';
-import '../providers/google_maps_provider.dart';
+import './providers/driver_provider.dart';
+import './providers/google_maps_provider.dart';
 
 import './screens/login_screen.dart';
 import './screens/register_screen.dart';
 import './screens/register_driver_screen.dart';
 import './screens/otp_screen.dart';
-import '../screens/home_screen.dart';
+import './screens/home_screen.dart';
+import 'screens/ride_requests_screen.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -68,14 +69,15 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        // home: const LoginScreen(),
-        home: const HomeScreen(),
+        home: const LoginScreen(),
+        // home: const HomeScreen(),
         // home: const RegisterDriverScreen(),
         routes: {
           RegisterScreen.routeName: (ctx) => const RegisterScreen(),
           RegisterDriverScreen.routeName: (ctx) => const RegisterDriverScreen(),
           OtpScreen.routeName: (ctx) => const OtpScreen(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),
+          RideRequestsScreen.routeName: (ctx) => const RideRequestsScreen(),
         },
       ),
     );

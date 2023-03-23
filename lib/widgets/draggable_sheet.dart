@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/screens/ride_requests_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,8 +38,24 @@ class DraggableSheet extends StatelessWidget {
                       await Provider.of<GoogleMapsProvider>(context,
                               listen: false)
                           .findRidesDriver();
+                      Navigator.of(context)
+                          .pushNamed(RideRequestsScreen.routeName);
                     } catch (e) {
-                      print(e);
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text("Error"),
+                          content: Text(e.toString()),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                              child: Text("Okay"),
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   },
                   child: Row(

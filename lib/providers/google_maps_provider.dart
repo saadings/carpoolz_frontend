@@ -1,4 +1,3 @@
-import 'package:carpoolz_frontend/services/api_services/ride_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -8,6 +7,7 @@ import 'package:google_place/google_place.dart';
 
 import '../models/google_maps.dart';
 import '../services/api_services/google_service.dart';
+import '../services/api_services/ride_service.dart';
 
 class GoogleMapsProvider with ChangeNotifier {
   String userName = "";

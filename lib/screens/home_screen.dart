@@ -1,9 +1,9 @@
-import 'package:carpoolz_frontend/providers/google_maps_provider.dart';
-import 'package:carpoolz_frontend/screens/register_driver_screen.dart';
-import 'package:carpoolz_frontend/widgets/draggable_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/google_maps_provider.dart';
+import '../screens/register_driver_screen.dart';
+import '../widgets/draggable_sheet.dart';
 import '../widgets/google_maps.dart';
 
 class HomeScreen extends StatelessWidget {
