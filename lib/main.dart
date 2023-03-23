@@ -1,7 +1,9 @@
+import 'package:carpoolz_frontend/providers/driver_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './providers/user_provider.dart';
+import '../providers/google_maps_provider.dart';
 
 import './screens/login_screen.dart';
 import './screens/register_screen.dart';
@@ -23,6 +25,14 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProxyProvider<UserProvider, DriverProvider>(
+          create: (_) => DriverProvider(userName: ""),
+          update: (ctx, user, previousState) =>
+              DriverProvider(userName: user.userName),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => GoogleMapsProvider(),
         ),
       ],
       child: MaterialApp(
