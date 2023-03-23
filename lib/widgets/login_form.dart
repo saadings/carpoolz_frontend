@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
 import '../screens/register_screen.dart';
-import '../screens/register_driver_screen.dart';
+import '../screens/home_screen.dart';
 import './small_loading.dart';
 
 class LoginForm extends StatefulWidget {
@@ -64,8 +64,7 @@ class _LoginFormState extends State<LoginForm> {
     try {
       await Provider.of<UserProvider>(context, listen: false)
           .login(_initValue['userName'], _initValue['password']);
-      Navigator.of(context)
-          .pushReplacementNamed(RegisterDriverScreen.routeName);
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
     } on DioError catch (e) {
       await _showErrorDialog(e.response!.data['message']);
     } catch (e) {

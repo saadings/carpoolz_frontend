@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/user_provider.dart';
+import '../providers/driver_provider.dart';
+import '../screens/home_screen.dart';
 import '../widgets/small_loading.dart';
 // import '../screens/register_driver_screen.dart';
 
@@ -63,14 +64,14 @@ class RegisterDriverFormState extends State<RegisterDriverForm> {
     _form.currentState!.save();
 
     try {
-      await Provider.of<UserProvider>(context, listen: false).registerDriver(
+      await Provider.of<DriverProvider>(context, listen: false).registerDriver(
         _initValue["cnic"],
         _initValue["licenseNo"],
       );
 
       await _showDialog("Driver Registered Successfully");
 
-      Navigator.of(context).pushReplacementNamed("/");
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
     } on DioError catch (e) {
       await _showDialog(e.response!.data['message']);
     } finally {

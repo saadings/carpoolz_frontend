@@ -31,9 +31,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'UberMove',
           textTheme: const TextTheme(
-              headline2: TextStyle(fontSize: 65),
-              headline6: TextStyle(
-                  fontSize: 15, fontWeight: FontWeight.bold, letterSpacing: 1)),
+            headline2: TextStyle(fontSize: 65),
+            headline6: TextStyle(
+                fontSize: 15, fontWeight: FontWeight.bold, letterSpacing: 1),
+          ),
           brightness: Brightness.dark,
           primarySwatch: Colors.purple,
           accentColor: const Color.fromARGB(150, 90, 224, 0),
@@ -47,8 +48,9 @@ class MyApp extends StatelessWidget {
           ),
           elevatedButtonTheme: const ElevatedButtonThemeData(
             style: ButtonStyle(
-              backgroundColor:
-                  MaterialStatePropertyAll(Color.fromARGB(150, 88, 224, 0)),
+              backgroundColor: MaterialStatePropertyAll(
+                Color.fromARGB(150, 90, 224, 0),
+              ),
             ),
           ),
         ),
@@ -59,6 +61,7 @@ class MyApp extends StatelessWidget {
           RegisterScreen.routeName: (ctx) => const RegisterScreen(),
           RegisterDriverScreen.routeName: (ctx) => const RegisterDriverScreen(),
           OtpScreen.routeName: (ctx) => const OtpScreen(),
+          HomeScreen.routeName: (ctx) => const HomeScreen(),
         },
       ),
     );
