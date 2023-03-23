@@ -44,7 +44,7 @@ class DraggableSheet extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                          title: Text("Error"),
+                          title: Text("Something Went Wrong!"),
                           content: Text(e.toString()),
                           actions: [
                             TextButton(

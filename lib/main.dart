@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -31,17 +32,19 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<UserProvider, DriverProvider>(
           create: (_) => DriverProvider(userName: ""),
-          update: (ctx, user, previousState) =>
-              DriverProvider(userName: user.userName),
+          update: (ctx, user, previousState) => DriverProvider(
+            userName: user.userName,
+          ),
         ),
         ChangeNotifierProxyProvider<UserProvider, GoogleMapsProvider>(
           create: (_) => GoogleMapsProvider(userName: ""),
-          update: (ctx, user, previousState) =>
-              GoogleMapsProvider(userName: user.userName),
+          update: (ctx, user, previousState) => GoogleMapsProvider(
+            userName: user.userName,
+          ),
         ),
-        ChangeNotifierProxyProvider<UserProvider, DriverProvider>(
-          create: (_) => DriverProvider(userName: ""),
-          update: (context, value, previous) => DriverProvider(
+        ChangeNotifierProxyProvider<UserProvider, RideRequestProvider>(
+          create: (_) => RideRequestProvider(userName: ""),
+          update: (context, value, previous) => RideRequestProvider(
             userName: value.userName,
           ),
         ),

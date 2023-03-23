@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import '../services/socket_services/socket_service.dart';
 
 class RideRequestProvider with ChangeNotifier {
-  String _userName = "";
+  String userName = "";
   List<Map<String, dynamic>> _rideRequests = [];
 
-  RideRequestProvider(this._userName);
+  RideRequestProvider({required this.userName});
 
   List<Map<String, dynamic>> get rideRequests {
     return [..._rideRequests];
   }
 
-  String get userName {
-    return _userName;
-  }
+  // String get userName {
+  //   return userName;
+  // }
 
   void _addRideRequest(Map<String, dynamic> rideRequest) {
     _rideRequests.add(rideRequest);
@@ -24,6 +24,8 @@ class RideRequestProvider with ChangeNotifier {
   void getRideRequests(String event) {
     SocketService.on(event, (data) {
       // Listen for 'message' event
+      print("event $event");
+      print("data $data");
       _addRideRequest(data); // Update UI with received data
       // notifyListeners();
     });
