@@ -1,8 +1,9 @@
-import 'package:carpoolz_frontend/providers/driver_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import './providers/user_provider.dart';
+import '../providers/driver_provider.dart';
 import '../providers/google_maps_provider.dart';
 
 import './screens/login_screen.dart';
@@ -11,7 +12,8 @@ import './screens/register_driver_screen.dart';
 import './screens/otp_screen.dart';
 import '../screens/home_screen.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

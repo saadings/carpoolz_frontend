@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GoogleService {
@@ -9,7 +10,7 @@ class GoogleService {
     try {
       final Dio _dio = Dio();
       final String _url =
-          'https://routes.googleapis.com/directions/v2:computeRoutes?\$key=AIzaSyAXD-Jtq7KNo93Sw7lEdidS-J5zX6NjTrs';
+          'https://routes.googleapis.com/directions/v2:computeRoutes?\$key=${dotenv.env['GOOGLE_MAPS_KEY']}';
 
       final _data = {
         "origin": {

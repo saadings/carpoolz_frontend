@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_place/google_place.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +15,7 @@ class GoogleAutoComplete extends StatefulWidget {
 
 class _GoogleAutoCompleteState extends State<GoogleAutoComplete> {
   late GooglePlace googlePlace;
-  String apiKey = 'AIzaSyAXD-Jtq7KNo93Sw7lEdidS-J5zX6NjTrs';
+  String apiKey = dotenv.env['GOOGLE_MAPS_KEY']!;
   bool _sendRequest = true;
   // Timer? _debounce;
 
