@@ -1,3 +1,9 @@
+// import 'package:carpoolz_frontend/services/socket_services/socket_service.dart';
+import 'dart:convert';
+
+import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -20,6 +26,39 @@ class _GoogleMapsState extends State<GoogleMaps> {
     if (_firstTime) {
       await Provider.of<GoogleMapsProvider>(context).getCurrentLocation();
       _loadMapStyles();
+
+      IO.Socket? socket;
+
+      try {
+        socket = IO.io(
+          'https://carpoolz.herokuapp.com/',
+          <String, dynamic>{
+            'transports': ['websocket'],
+            'autoConnect': false,
+          },
+        );
+
+        // SocketService().init();
+        // SocketService().listenToConnectionEvent();
+        // SocketService().connect();
+
+        // Connect to websocket
+        socket.on('connect', (_) => print('connected: ${socket!.id}'));
+        socket.on('laiba111', (data) {
+          // print("This is the data! $data");
+          // var data2 = json.decode(data);
+          print("This is the data2! $data");
+          Provider.of<RideRequestProvider>(
+            context,
+            listen: false,
+          ).addRideRequest(data);
+        });
+        socket.on('disconnect', (_) => print('disconnected: ${socket?.id}'));
+        socket.connect();
+      } catch (e) {
+        print("Error ${e.toString()}");
+      }
+
       _firstTime = false;
     }
     super.didChangeDependencies();

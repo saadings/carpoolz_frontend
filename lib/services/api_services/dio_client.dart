@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import '../local_storage_services/access_token_service.dart';
 
 class DioClient {
-  static var _dio;
+  static Dio? _dio;
 
   static Dio get dio {
     if (_dio == null) {
@@ -13,7 +13,7 @@ class DioClient {
       ));
 
       // Request interceptor
-      _dio.interceptors.add(
+      _dio!.interceptors.add(
         InterceptorsWrapper(
           onRequest: (options, handler) async {
             // Do something before the request is sent
@@ -34,7 +34,7 @@ class DioClient {
       );
 
       // Response interceptor
-      _dio.interceptors.add(
+      _dio!.interceptors.add(
         InterceptorsWrapper(
           onResponse: (response, handler) {
             // Do something with the response data
@@ -56,7 +56,7 @@ class DioClient {
                 final refreshToken = await AccessTokenService()
                     .getToken(AccessTokenService.refreshTokenKey);
 
-                final Response response = await _dio.post(
+                final Response response = await _dio!.post(
                   '/users/refresh/token',
                   data: {
                     "refreshToken": refreshToken,
@@ -68,7 +68,7 @@ class DioClient {
                   response.data['accessToken'],
                 );
 
-                _dio
+                _dio!
                     .request(
                       e.requestOptions.path,
                       data: e.requestOptions.data,
@@ -90,6 +90,6 @@ class DioClient {
         ),
       );
     }
-    return _dio;
+    return _dio!;
   }
 }

@@ -1,11 +1,13 @@
-import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
+import 'package:carpoolz_frontend/screens/confirm_ride_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+// import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import './providers/user_provider.dart';
 import './providers/driver_provider.dart';
 import './providers/google_maps_provider.dart';
+import '../providers/ride_requests_provider.dart';
 
 import './screens/login_screen.dart';
 import './screens/register_screen.dart';
@@ -15,6 +17,25 @@ import './screens/home_screen.dart';
 import './screens/ride_requests_screen.dart';
 
 Future<void> main() async {
+  // IO.Socket? socket;
+
+  // try {
+  //   socket = IO.io(
+  //     'https://carpoolz.herokuapp.com/',
+  //     <String, dynamic>{
+  //       'transports': ['websocket'],
+  //       'autoConnect': false,
+  //     },
+  //   );
+
+  //   // Connect to websocket
+  //   socket.connect();
+  //   socket.on('connect', (_) => print('connect: ${socket!.id}'));
+  //   socket.on('laiba111', (data) => print("This is the data! $data"));
+  //   socket.on('disconnect', (_) => print('disconnect'));
+  // } catch (e) {
+  //   print("Error ${e.toString()}");
+  // }
   await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
@@ -87,6 +108,7 @@ class MyApp extends StatelessWidget {
           OtpScreen.routeName: (ctx) => const OtpScreen(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),
           RideRequestsScreen.routeName: (ctx) => const RideRequestsScreen(),
+          ConfirmRideScreen.routeName: (ctx) => const ConfirmRideScreen(),
         },
       ),
     );
