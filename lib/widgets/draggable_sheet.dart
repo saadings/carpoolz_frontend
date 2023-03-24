@@ -6,7 +6,9 @@ import '../providers/google_maps_provider.dart';
 import '../widgets/google_auto_complete.dart';
 
 class DraggableSheet extends StatelessWidget {
+  final bool isDriver;
   const DraggableSheet({
+    required this.isDriver,
     super.key,
   });
 
@@ -35,9 +37,17 @@ class DraggableSheet extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     try {
-                      await Provider.of<GoogleMapsProvider>(context,
-                              listen: false)
-                          .findRidesDriver();
+                      if (isDriver) {
+                        print(isDriver);
+                        await Provider.of<GoogleMapsProvider>(context,
+                                listen: false)
+                            .findRidesDriver();
+                      } else {
+                        print(isDriver);
+                        await Provider.of<GoogleMapsProvider>(context,
+                                listen: false)
+                            .findRidesPassenger();
+                      }
                       Navigator.of(context)
                           .pushNamed(RideRequestsScreen.routeName);
                     } catch (e) {

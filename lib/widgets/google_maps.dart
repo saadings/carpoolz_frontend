@@ -43,8 +43,10 @@ class _GoogleMapsState extends State<GoogleMaps> {
         // SocketService().connect();
 
         // Connect to websocket
+        final _userName =
+            Provider.of<GoogleMapsProvider>(context, listen: false).userName;
         socket.on('connect', (_) => print('connected: ${socket!.id}'));
-        socket.on('laiba111', (data) {
+        socket.on(_userName, (data) {
           // print("This is the data! $data");
           // var data2 = json.decode(data);
           print("This is the data2! $data");
