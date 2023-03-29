@@ -1,4 +1,5 @@
 import 'package:carpoolz_frontend/screens/ride_requests_screen.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,7 @@ class DraggableSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.4,
+      initialChildSize: 0.2,
       minChildSize: 0.2,
       maxChildSize: 0.6,
       builder: (ctx, scrollController) => Container(
@@ -50,12 +51,12 @@ class DraggableSheet extends StatelessWidget {
                       }
                       Navigator.of(context)
                           .pushNamed(RideRequestsScreen.routeName);
-                    } catch (e) {
+                    } on DioError catch (e) {
                       showDialog(
                         context: context,
                         builder: (ctx) => AlertDialog(
                           title: Text("Something Went Wrong!"),
-                          content: Text(e.toString()),
+                          content: Text(e.response!.data['message'].toString()),
                           actions: [
                             TextButton(
                               onPressed: () {

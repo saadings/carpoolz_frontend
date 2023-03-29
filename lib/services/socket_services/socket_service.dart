@@ -1,52 +1,36 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService {
-  final String _serverUrl = 'https://carpoolz.herokuapp.com/';
+  static final SocketService _instance = SocketService._internal();
+
+  factory SocketService() {
+    return _instance;
+  }
 
   IO.Socket? _socket;
 
-  IO.Socket? get socket => _socket;
-
-  void init() {
-    if (_socket == null) {
-      _socket = IO.io(
-        'https://carpoolz.herokuapp.com/',
-        <String, dynamic>{
-          'transports': ['websocket'],
-          'autoConnect': false,
-        },
-      );
-    }
-  }
+  SocketService._internal();
 
   void connect() {
-    if (_socket != null) {
-      _socket!.connect();
+    if (_socket == null) {
+      _socket = IO.io('https://carpoolz.herokuapp.com/', <String, dynamic>{
+        'transports': ['websocket'],
+        'autoConnect': false,
+      });
     }
-  }
-
-  void listenToConnectionEvent() {
-    if (_socket != null) {
-      _socket!.on(
-        'connect',
-        (_) => print('connected to Socket: ${_socket!.id}'),
-      );
-    }
+    _socket!.connect();
   }
 
   void disconnect() {
     if (_socket != null) {
       _socket!.disconnect();
+      _socket = null;
     }
   }
 
-  void emit(String event, dynamic data) {
-    if (_socket != null) {
-      _socket!.emit(event, data);
-    }
-  }
+  IO.Socket? get socket => _socket;
 
-  void on(String event, Function(dynamic) callback) {
+  void on(String event, Function(dynamic data) callback) {
     if (_socket != null) {
       _socket!.on(event, callback);
     }

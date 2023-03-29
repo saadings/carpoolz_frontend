@@ -22,61 +22,39 @@ class _GoogleMapsState extends State<GoogleMaps> {
   bool _firstTime = true;
 
   @override
-  void didChangeDependencies() async {
-    if (_firstTime) {
-      await Provider.of<GoogleMapsProvider>(context).getCurrentLocation();
-      _loadMapStyles();
-
-      IO.Socket? socket;
-
-      try {
-        socket = IO.io(
-          'https://carpoolz.herokuapp.com/',
-          <String, dynamic>{
-            'transports': ['websocket'],
-            'autoConnect': false,
-          },
-        );
-
-        // SocketService().init();
-        // SocketService().listenToConnectionEvent();
-        // SocketService().connect();
-
-        // Connect to websocket
-        final _userName =
-            Provider.of<GoogleMapsProvider>(context, listen: false).userName;
-        socket.on('connect', (_) => print('connected: ${socket!.id}'));
-        socket.on(_userName, (data) {
-          // print("This is the data! $data");
-          // var data2 = json.decode(data);
-          print("This is the data2! $data");
-          Provider.of<RideRequestProvider>(
-            context,
-            listen: false,
-          ).addRideRequest(data);
-        });
-        socket.on('disconnect', (_) => print('disconnected: ${socket?.id}'));
-        socket.connect();
-      } catch (e) {
-        print("Error ${e.toString()}");
-      }
-
-      _firstTime = false;
-    }
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+    _loadMapStyles();
   }
 
   // @override
-  // void initState() {
-  //   _getCurrentLocation();
-  //   _loadMapStyles();
-  //   super.initState();
+  // void didChangeDependencies() async {
+  //   if (_firstTime) {
+  //     try {
+  //       await Provider.of<GoogleMapsProvider>(context).getCurrentLocation();
+  //     } catch (e) {
+  //       print(e.toString());
+  //     }
+
+  //     _firstTime = false;
+  //   }
+  //   super.didChangeDependencies();
   // }
 
   Future<void> _loadMapStyles() async {
     _darkMapStyle = await rootBundle.loadString(
       'assets/google_maps_styles/dark_style.json',
     );
+  }
+
+  Future<void> _getCurrentLocation() async {
+    try {
+      await Provider.of<GoogleMapsProvider>(context, listen: false)
+          .getCurrentLocation();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -115,18 +93,22 @@ class _GoogleMapsState extends State<GoogleMaps> {
                 compassEnabled: false,
                 rotateGesturesEnabled: true,
                 // buildingsEnabled: true,
-                polylines: Set<Polyline>.from([
-                  Polyline(
-                    polylineId: PolylineId("1"),
-                    color: Colors.purple,
-                    points: _polylineCoordinates,
-                    onTap: () {},
-                    width: 4,
-                  ),
-                ]),
+                polylines: Set<Polyline>.from(
+                  [
+                    Polyline(
+                      polylineId: PolylineId("1"),
+                      color: Colors.purple,
+                      points: _polylineCoordinates,
+                      onTap: () {},
+                      width: 4,
+                    ),
+                  ],
+                ),
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
-                      _currentPosition.latitude, _currentPosition.longitude),
+                    _currentPosition.latitude,
+                    _currentPosition.longitude,
+                  ),
                   zoom: 18,
                 ),
                 onMapCreated: (GoogleMapController controller) {

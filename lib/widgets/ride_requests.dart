@@ -1,11 +1,8 @@
-import 'package:carpoolz_frontend/screens/confirm_ride_screen.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../services/socket_services/socket_service.dart';
 import '../providers/ride_requests_provider.dart';
+import '../screens/confirm_ride_screen.dart';
 
 class RideRequests extends StatefulWidget {
   const RideRequests({super.key});
@@ -19,69 +16,27 @@ class _RideRequestsState extends State<RideRequests> {
   final rideRequests = [];
 
   @override
-  void initState() {
-    // SocketService().init();
-    // SocketService().listenToConnectionEvent();
-    // SocketService().connect();
-
-    // IO.Socket? socket;
-
-    // try {
-    //   socket = IO.io(
-    //     'https://carpoolz.herokuapp.com/',
-    //     <String, dynamic>{
-    //       'transports': ['websocket'],
-    //       'autoConnect': false,
-    //     },
-    //   );
-
-    //   // Connect to websocket
-    //   socket.on('laiba111', (data) {
-    //     print(data);
-    //     // setState(() {
-    //     // rideRequests.add(data);
-    //     // });
-    //   });
-    //   socket.on('connect', (_) => print('connect: ${socket!.id}'));
-    //   socket.on('disconnect', (_) => print('disconnect'));
-    //   socket.connect();
-    // } catch (e) {
-    //   print("Error ${e.toString()}");
-    // }
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     if (_firstTime) {
-      final String _userName = "laiba111";
-      // final String _userName =
-      //     Provider.of<RideRequestProvider>(context).userName;
-      // Provider.of<RideRequestProvider>(context, listen: false).getRideRequests(
-      //   _userName,
-      // );
+      try {
+        Provider.of<RideRequestProvider>(context, listen: false)
+            .connectSocket();
+        final _userName =
+            Provider.of<RideRequestProvider>(context, listen: false).userName;
+        Provider.of<RideRequestProvider>(context, listen: false)
+            .getRideRequests("abdullah1234");
+      } catch (e) {
+        print("Error ${e.toString()}");
+      }
 
       _firstTime = false;
     }
     super.didChangeDependencies();
   }
 
-  // void listen() {
-  //   socket!.on(
-  //     'laiba111',
-  //     (data) {
-  //       print(data);
-  //       // setState(() {
-  //       rideRequests.add(data);
-  //       // });
-  //     },
-  //   );
-  // }
-
   @override
   void dispose() {
-    // SocketService().disconnect();
-    // socket!.disconnect();
+    // Provider.of<RideRequestProvider>(context, listen: false).disconnectSocket();
     super.dispose();
   }
 

@@ -16,6 +16,24 @@ class RideRequestProvider with ChangeNotifier {
   //   return userName;
   // }
 
+  void connectSocket() {
+    SocketService socketService = SocketService();
+    socketService.connect();
+
+    socketService.on('connect', (_) {
+      print('connected: ${socketService.socket!.id}');
+    });
+
+    socketService.on('disconnect', (_) {
+      print('disconnected: ${socketService.socket!.id}');
+    });
+  }
+
+  void disconnectSocket() {
+    SocketService socketService = SocketService();
+    socketService.disconnect();
+  }
+
   void addRideRequest(var rideRequest) {
     // print("ride req data: ${rideRequest}");
     _rideRequests.add(rideRequest);
@@ -24,22 +42,11 @@ class RideRequestProvider with ChangeNotifier {
   }
 
   void getRideRequests(String event) {
-    print(event);
-    try {
-      SocketService().on(
-        event,
-        (data) {
-          // Listen for 'message' event
-          print("event $event");
-          print("data $data");
-          addRideRequest(data); // Update UI with received data
-          // notifyListeners();
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
-    // SocketService().connect();
+    SocketService socketService = SocketService();
+    socketService.on(event, (data) {
+      print("This is the data! $data");
+      addRideRequest(data);
+    });
   }
 
   // void removeRideRequest(String rideRequestId) {

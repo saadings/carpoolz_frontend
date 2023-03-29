@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       // foregroundColor: Color.fromRGBO(156, 39, 176, 1),
       elevation: 5,
-      backgroundColor: Color.fromRGBO(156, 39, 176, 0.4),
+      // backgroundColor: Color.fromRGBO(156, 39, 176, 0.4),
       actions: [
         // IconButton(
         //   onPressed: () {},
