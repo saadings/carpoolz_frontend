@@ -1,4 +1,5 @@
 import 'package:carpoolz_frontend/screens/ride_requests_screen.dart';
+import 'package:carpoolz_frontend/widgets/small_loading.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,12 +7,19 @@ import 'package:provider/provider.dart';
 import '../providers/google_maps_provider.dart';
 import '../widgets/google_auto_complete.dart';
 
-class DraggableSheet extends StatelessWidget {
+class DraggableSheet extends StatefulWidget {
   final bool isDriver;
   const DraggableSheet({
     required this.isDriver,
     super.key,
   });
+
+  @override
+  State<DraggableSheet> createState() => _DraggableSheetState();
+}
+
+class _DraggableSheetState extends State<DraggableSheet> {
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +45,18 @@ class DraggableSheet extends StatelessWidget {
                 const SizedBox(height: 5),
                 ElevatedButton(
                   onPressed: () async {
+                    setState(() {
+                      _loading = true;
+                    });
+
                     try {
-                      if (isDriver) {
-                        print(isDriver);
+                      if (widget.isDriver) {
+                        print(widget.isDriver);
                         await Provider.of<GoogleMapsProvider>(context,
                                 listen: false)
                             .findRidesDriver();
                       } else {
-                        print(isDriver);
+                        print(widget.isDriver);
                         await Provider.of<GoogleMapsProvider>(context,
                                 listen: false)
                             .findRidesPassenger();
@@ -67,13 +79,21 @@ class DraggableSheet extends StatelessWidget {
                           ],
                         ),
                       );
+                    } finally {
+                      setState(
+                        () {
+                          _loading = false;
+                        },
+                      );
                     }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Go"),
-                      Icon(Icons.arrow_forward),
+                      _loading
+                          ? const SmallLoading()
+                          : Icon(Icons.arrow_forward),
                     ],
                   ),
                 )

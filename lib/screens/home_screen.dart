@@ -57,18 +57,22 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBodyBehindAppBar: true,
       drawer: Drawer(
         child: Container(
-          child: Column(children: [
-            Container(
-              height: _appBar.preferredSize.height + 23.75,
-              color: Theme.of(context).accentColor,
-            ),
-            ListTile(
-              title: Text("Register Driver"),
-              onTap: () {
-                Navigator.of(context).pushNamed(RegisterDriverScreen.routeName);
-              },
-            ),
-          ]),
+          child: Column(
+            children: [
+              Container(
+                height: _appBar.preferredSize.height + 23.75,
+                color: Theme.of(context).accentColor,
+              ),
+              ListTile(
+                title: Text("Register Driver"),
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(RegisterDriverScreen.routeName);
+                },
+              ),
+              Divider(),
+            ],
+          ),
         ),
       ),
       body: Stack(
