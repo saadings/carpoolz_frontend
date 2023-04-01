@@ -6,7 +6,7 @@ import '../services/local_storage_services/access_token_service.dart';
 
 enum Gender { male, female }
 
-enum Type { driver, vendor }
+enum Type { passenger, driver, vendor }
 
 class UserProvider with ChangeNotifier {
   String _userName = "";
@@ -18,6 +18,7 @@ class UserProvider with ChangeNotifier {
   int _rating = 0;
   bool _active = false;
   List<Type>? _types = [];
+  Type _currentType = Type.passenger;
 
   String _accessToken = "";
   String _refreshToken = "";
@@ -41,6 +42,7 @@ class UserProvider with ChangeNotifier {
   Gender? get gender => _gender;
   String get accessToken => _accessToken;
   String get refreshToken => _refreshToken;
+  List<Type>? get types => _types;
 
   Future<void> register(
     String userName,

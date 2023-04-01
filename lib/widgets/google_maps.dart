@@ -1,9 +1,3 @@
-// import 'package:carpoolz_frontend/services/socket_services/socket_service.dart';
-import 'dart:convert';
-
-import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -27,20 +21,6 @@ class _GoogleMapsState extends State<GoogleMaps> {
     _getCurrentLocation();
     _loadMapStyles();
   }
-
-  // @override
-  // void didChangeDependencies() async {
-  //   if (_firstTime) {
-  //     try {
-  //       await Provider.of<GoogleMapsProvider>(context).getCurrentLocation();
-  //     } catch (e) {
-  //       print(e.toString());
-  //     }
-
-  //     _firstTime = false;
-  //   }
-  //   super.didChangeDependencies();
-  // }
 
   Future<void> _loadMapStyles() async {
     _darkMapStyle = await rootBundle.loadString(
