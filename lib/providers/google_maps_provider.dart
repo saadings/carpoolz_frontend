@@ -39,6 +39,10 @@ class GoogleMapsProvider with ChangeNotifier {
   }
 
   Future<void> getCurrentLocation() async {
+    if (_currentPosition != null) {
+      return;
+    }
+
     bool serviceEnabled;
     LocationPermission permission;
 

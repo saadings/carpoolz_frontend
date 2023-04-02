@@ -16,11 +16,13 @@ class _GoogleMapsState extends State<GoogleMaps> {
   bool _firstTime = true;
 
   @override
-  void initState() {
-    super.initState();
-    _getCurrentLocation();
-    _loadMapStyles();
-    print("Hi");
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    await _getCurrentLocation();
+    if (_firstTime) {
+      await _loadMapStyles();
+      _firstTime = false;
+    }
   }
 
   Future<void> _loadMapStyles() async {
