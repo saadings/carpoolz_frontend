@@ -39,7 +39,7 @@ class _DraggableSheetState extends State<DraggableSheet> {
             await Provider.of<GoogleMapsProvider>(context, listen: false)
                 .findRidesPassenger();
 
-        response.data['data'].forEach(
+        response.data['data']?.forEach(
           (e) => Provider.of<RideRequestProvider>(context, listen: false)
               .addRideRequest(e),
         );
