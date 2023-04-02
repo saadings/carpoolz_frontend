@@ -15,8 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var value = true;
-
   @override
   Widget build(BuildContext context) {
     AppBar _appBar = AppBar(
@@ -88,9 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           GoogleMaps(),
-          DraggableSheet(
-            isDriver: value,
-          ),
+          DraggableSheet(),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterTop,

@@ -20,6 +20,7 @@ class _GoogleMapsState extends State<GoogleMaps> {
     super.initState();
     _getCurrentLocation();
     _loadMapStyles();
+    print("Hi");
   }
 
   Future<void> _loadMapStyles() async {

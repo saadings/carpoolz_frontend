@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/providers/user_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,15 +6,11 @@ import 'package:provider/provider.dart';
 import '../providers/google_maps_provider.dart';
 import '../providers/ride_requests_provider.dart';
 import '../screens/ride_requests_screen.dart';
-import '../screens/ride_requests_screen.dart';
 import '../widgets/google_auto_complete.dart';
-import '../widgets/small_loading.dart';
 import '../widgets/small_loading.dart';
 
 class DraggableSheet extends StatefulWidget {
-  final bool isDriver;
   const DraggableSheet({
-    required this.isDriver,
     super.key,
   });
 
@@ -33,12 +30,11 @@ class _DraggableSheetState extends State<DraggableSheet> {
     );
 
     try {
-      if (widget.isDriver) {
-        print(widget.isDriver);
+      if (Provider.of<UserProvider>(context, listen: false).currentType ==
+          Type.driver) {
         await Provider.of<GoogleMapsProvider>(context, listen: false)
             .findRidesDriver();
       } else {
-        print(widget.isDriver);
         await Provider.of<GoogleMapsProvider>(context, listen: false)
             .findRidesPassenger();
       }
