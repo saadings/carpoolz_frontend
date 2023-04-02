@@ -43,6 +43,7 @@ class UserProvider with ChangeNotifier {
   String get accessToken => _accessToken;
   String get refreshToken => _refreshToken;
   List<Type>? get types => _types;
+  Type get currentType => _currentType;
 
   Future<void> register(
     String userName,
@@ -153,5 +154,23 @@ class UserProvider with ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+  }
+
+   Future<void>  setType(String userType)async{
+    print(userType);
+    if(userType == 'Driver')
+    _currentType = Type.driver;
+
+    else if(userType == 'Passenger')
+    _currentType = Type.driver;
+
+    else
+    _currentType = Type.vendor;
+    notifyListeners();
+  }
+
+    void appendTypeList(Type userType){
+    _types?.add(userType);
+    notifyListeners();
   }
 }

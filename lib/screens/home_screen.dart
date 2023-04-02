@@ -1,14 +1,18 @@
+import 'package:carpoolz_frontend/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/google_maps_provider.dart';
+import '../providers/user_provider.dart';
 import '../screens/register_driver_screen.dart';
 import '../widgets/draggable_sheet.dart';
 import '../widgets/google_maps.dart';
+import '../widgets/sidebar.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
   const HomeScreen({super.key});
+ 
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -31,24 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
         //   onPressed: () {},
         //   icon: const Icon(Icons.search),
         // ),
-        Row(
-          children: [
-            Text("Switch to Driver"),
-            Switch(
-              value: value,
-              onChanged: (value) {
-                setState(() {
-                  this.value = value;
-                });
-              },
-            ),
-          ],
-        ),
-
-        // IconButton(
-        //   onPressed: () {},
-        //   icon: const Icon(Icons.notifications),
-        // ),
       ],
     );
 
@@ -57,20 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
       extendBodyBehindAppBar: true,
       drawer: Drawer(
         child: Container(
+          padding: EdgeInsets.only(top: 70.0),
+          
           child: Column(
             children: [
-              Container(
-                height: _appBar.preferredSize.height + 23.75,
-                color: Theme.of(context).accentColor,
-              ),
-              ListTile(
-                title: Text("Register Driver"),
-                onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(RegisterDriverScreen.routeName);
-                },
-              ),
-              Divider(),
+             SideBar()
             ],
           ),
         ),
