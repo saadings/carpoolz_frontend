@@ -41,10 +41,10 @@ class UserButtonGroupState extends State<UserButtonGroup> {
             .types!
             .contains(Type.driver) &&
         _userTypeState == 'Driver') {
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       Navigator.of(context).pushNamed(RegisterDriverScreen.routeName);
-    }
-    Navigator.of(context).pop();
+    } else
+      Navigator.of(context).pop();
   }
 
   @override
