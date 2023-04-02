@@ -1,12 +1,11 @@
-import 'package:carpoolz_frontend/providers/user_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/user_provider.dart';
 import '../providers/driver_provider.dart';
 import '../screens/home_screen.dart';
 import '../widgets/small_loading.dart';
-// import '../screens/register_driver_screen.dart';
 
 class RegisterDriverForm extends StatefulWidget {
   const RegisterDriverForm({Key? key}) : super(key: key);

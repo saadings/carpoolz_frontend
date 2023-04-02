@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
-// import '../screens/home_screen.dart';
 import '../screens/register_driver_screen.dart';
 
 class UserButtonGroup extends StatefulWidget {
