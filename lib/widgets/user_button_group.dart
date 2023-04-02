@@ -30,7 +30,6 @@ class UserButtonGroupState extends State<UserButtonGroup> {
         for (int i = 0; i < _selectedUsers.length; i++) {
           _selectedUsers[i] = i == index;
           _userTypeState = _users[index].toString();
-          print(_userTypeState);
         }
         Provider.of<UserProvider>(context, listen: false)
             .setType(_userTypeState);
