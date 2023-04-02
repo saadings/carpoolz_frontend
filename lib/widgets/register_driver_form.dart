@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/providers/user_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -68,6 +69,9 @@ class RegisterDriverFormState extends State<RegisterDriverForm> {
         _initValue["cnic"],
         _initValue["licenseNo"],
       );
+
+      Provider.of<UserProvider>(context, listen: false)
+          .appendTypeList(Type.driver);
 
       await _showDialog("Driver Registered Successfully");
 

@@ -156,21 +156,19 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-   Future<void>  setType(String userType)async{
-    print(userType);
-    if(userType == 'Driver')
-    _currentType = Type.driver;
+  void setType(String userType) {
+    // print(userType);
+    if (userType == 'Driver')
+      _currentType = Type.driver;
+    else if (userType == 'Passenger')
+      _currentType = Type.passenger;
+    else if (userType == 'Vendor') _currentType = Type.vendor;
 
-    else if(userType == 'Passenger')
-    _currentType = Type.driver;
-
-    else
-    _currentType = Type.vendor;
     notifyListeners();
   }
 
-    void appendTypeList(Type userType){
-    _types?.add(userType);
+  void appendTypeList(Type userType) {
+    _types!.add(userType);
     notifyListeners();
   }
 }

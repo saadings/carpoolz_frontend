@@ -1,4 +1,3 @@
-import 'package:carpoolz_frontend/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,12 +6,11 @@ import '../providers/user_provider.dart';
 import '../screens/register_driver_screen.dart';
 import '../widgets/draggable_sheet.dart';
 import '../widgets/google_maps.dart';
-import '../widgets/sidebar.dart';
+import '../widgets/user_button_group.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
   const HomeScreen({super.key});
- 
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -42,14 +40,14 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: _appBar,
       extendBodyBehindAppBar: true,
       drawer: Drawer(
-        child: Container(
-          padding: EdgeInsets.only(top: 70.0),
-          
-          child: Column(
-            children: [
-             SideBar()
-            ],
-          ),
+        child: Column(
+          children: [
+            Container(
+              height: _appBar.preferredSize.height + 23.75,
+              color: Theme.of(context).accentColor,
+            ),
+            UserButtonGroup(),
+          ],
         ),
       ),
       body: Stack(
