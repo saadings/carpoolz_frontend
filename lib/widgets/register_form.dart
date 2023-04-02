@@ -68,6 +68,7 @@ class _RegisterFormState extends State<RegisterForm> {
             onPressed: () {
               Navigator.of(ctx).pop();
             },
+            
             child: const Text("Okay"),
           ),
         ],

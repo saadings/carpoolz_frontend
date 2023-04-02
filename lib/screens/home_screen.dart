@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/google_maps_provider.dart';
+import '../providers/user_provider.dart';
 import '../screens/register_driver_screen.dart';
 import '../widgets/draggable_sheet.dart';
 import '../widgets/google_maps.dart';
+import '../widgets/user_button_group.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
@@ -31,24 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
         //   onPressed: () {},
         //   icon: const Icon(Icons.search),
         // ),
-        Row(
-          children: [
-            Text("Switch to Driver"),
-            Switch(
-              value: value,
-              onChanged: (value) {
-                setState(() {
-                  this.value = value;
-                });
-              },
-            ),
-          ],
-        ),
-
-        // IconButton(
-        //   onPressed: () {},
-        //   icon: const Icon(Icons.notifications),
-        // ),
       ],
     );
 
@@ -56,23 +40,14 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: _appBar,
       extendBodyBehindAppBar: true,
       drawer: Drawer(
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                height: _appBar.preferredSize.height + 23.75,
-                color: Theme.of(context).accentColor,
-              ),
-              ListTile(
-                title: Text("Register Driver"),
-                onTap: () {
-                  Navigator.of(context)
-                      .pushNamed(RegisterDriverScreen.routeName);
-                },
-              ),
-              Divider(),
-            ],
-          ),
+        child: Column(
+          children: [
+            Container(
+              height: _appBar.preferredSize.height + 23.75,
+              color: Theme.of(context).accentColor,
+            ),
+            UserButtonGroup(),
+          ],
         ),
       ),
       body: Stack(

@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/user_provider.dart';
 import '../providers/driver_provider.dart';
 import '../screens/home_screen.dart';
 import '../widgets/small_loading.dart';
-// import '../screens/register_driver_screen.dart';
 
 class RegisterDriverForm extends StatefulWidget {
   const RegisterDriverForm({Key? key}) : super(key: key);
@@ -68,6 +68,9 @@ class RegisterDriverFormState extends State<RegisterDriverForm> {
         _initValue["cnic"],
         _initValue["licenseNo"],
       );
+
+      Provider.of<UserProvider>(context, listen: false)
+          .appendTypeList(Type.driver);
 
       await _showDialog("Driver Registered Successfully");
 

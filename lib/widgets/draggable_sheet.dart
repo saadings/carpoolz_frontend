@@ -1,11 +1,11 @@
-import 'package:carpoolz_frontend/screens/ride_requests_screen.dart';
-import 'package:carpoolz_frontend/widgets/small_loading.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/google_maps_provider.dart';
+import '../screens/ride_requests_screen.dart';
 import '../widgets/google_auto_complete.dart';
+import '../widgets/small_loading.dart';
 
 class DraggableSheet extends StatefulWidget {
   final bool isDriver;
@@ -20,6 +20,50 @@ class DraggableSheet extends StatefulWidget {
 
 class _DraggableSheetState extends State<DraggableSheet> {
   bool _loading = false;
+
+  Future<void> _findRides() async {
+    setState(
+      () {
+        _loading = true;
+      },
+    );
+
+    try {
+      if (widget.isDriver) {
+        print(widget.isDriver);
+        await Provider.of<GoogleMapsProvider>(context, listen: false)
+            .findRidesDriver();
+      } else {
+        print(widget.isDriver);
+        await Provider.of<GoogleMapsProvider>(context, listen: false)
+            .findRidesPassenger();
+      }
+
+      Navigator.of(context).pushNamed(RideRequestsScreen.routeName);
+    } on DioError catch (e) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Something Went Wrong!"),
+          content: Text(e.response!.data['message'].toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: Text("Okay"),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      setState(
+        () {
+          _loading = false;
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,56 +88,16 @@ class _DraggableSheetState extends State<DraggableSheet> {
                 GoogleAutoComplete(),
                 const SizedBox(height: 5),
                 ElevatedButton(
-                  onPressed: () async {
-                    setState(() {
-                      _loading = true;
-                    });
-
-                    try {
-                      if (widget.isDriver) {
-                        print(widget.isDriver);
-                        await Provider.of<GoogleMapsProvider>(context,
-                                listen: false)
-                            .findRidesDriver();
-                      } else {
-                        print(widget.isDriver);
-                        await Provider.of<GoogleMapsProvider>(context,
-                                listen: false)
-                            .findRidesPassenger();
-                      }
-                      Navigator.of(context)
-                          .pushNamed(RideRequestsScreen.routeName);
-                    } on DioError catch (e) {
-                      showDialog(
-                        context: context,
-                        builder: (ctx) => AlertDialog(
-                          title: Text("Something Went Wrong!"),
-                          content: Text(e.response!.data['message'].toString()),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(ctx).pop();
-                              },
-                              child: Text("Okay"),
-                            ),
-                          ],
-                        ),
-                      );
-                    } finally {
-                      setState(
-                        () {
-                          _loading = false;
-                        },
-                      );
-                    }
-                  },
+                  onPressed: _findRides,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Go"),
                       _loading
                           ? const SmallLoading()
-                          : Icon(Icons.arrow_forward),
+                          : Icon(
+                              Icons.arrow_forward,
+                            ),
                     ],
                   ),
                 )
@@ -105,3 +109,47 @@ class _DraggableSheetState extends State<DraggableSheet> {
     );
   }
 }
+
+// () async {
+//                     setState(() {
+//                       _loading = true;
+//                     });
+
+//                     try {
+//                       if (widget.isDriver) {
+//                         print(widget.isDriver);
+//                         await Provider.of<GoogleMapsProvider>(context,
+//                                 listen: false)
+//                             .findRidesDriver();
+//                       } else {
+//                         print(widget.isDriver);
+//                         await Provider.of<GoogleMapsProvider>(context,
+//                                 listen: false)
+//                             .findRidesPassenger();
+//                       }
+//                       Navigator.of(context)
+//                           .pushNamed(RideRequestsScreen.routeName);
+//                     } on DioError catch (e) {
+//                       showDialog(
+//                         context: context,
+//                         builder: (ctx) => AlertDialog(
+//                           title: Text("Something Went Wrong!"),
+//                           content: Text(e.response!.data['message'].toString()),
+//                           actions: [
+//                             TextButton(
+//                               onPressed: () {
+//                                 Navigator.of(ctx).pop();
+//                               },
+//                               child: Text("Okay"),
+//                             ),
+//                           ],
+//                         ),
+//                       );
+//                     } finally {
+//                       setState(
+//                         () {
+//                           _loading = false;
+//                         },
+//                       );
+//                     }
+//                   }
