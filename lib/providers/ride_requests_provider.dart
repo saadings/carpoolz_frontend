@@ -35,9 +35,9 @@ class RideRequestProvider with ChangeNotifier {
   }
 
   void addRideRequest(var rideRequest) {
-    // print("ride req data: ${rideRequest}");
+    print("ride req data: ${rideRequest}");
     _rideRequests.add(rideRequest);
-    print(_rideRequests[0]);
+    // print(_rideRequests[0]);
     notifyListeners();
   }
 

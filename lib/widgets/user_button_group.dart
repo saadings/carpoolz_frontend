@@ -40,7 +40,8 @@ class UserButtonGroupState extends State<UserButtonGroup> {
             .contains(Type.driver) &&
         _userTypeState == 'Driver') {
       // Navigator.of(context).pop();
-      Navigator.of(context).pushNamed(RegisterDriverScreen.routeName);
+      Navigator.of(context)
+          .pushReplacementNamed(RegisterDriverScreen.routeName);
     } else
       Navigator.of(context).pop();
   }
@@ -76,7 +77,7 @@ class UserButtonGroupState extends State<UserButtonGroup> {
       width: 200.0,
       child: Column(
         children: [
-          Text('Switch To', style: TextStyle(fontSize: 20.0)),
+          Text('Switch User', style: TextStyle(fontSize: 20.0)),
           const SizedBox(height: 5),
           ToggleButtons(
             direction: Axis.vertical,

@@ -1,8 +1,8 @@
-import 'package:carpoolz_frontend/providers/user_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/user_provider.dart';
 import '../providers/google_maps_provider.dart';
 import '../providers/ride_requests_provider.dart';
 import '../screens/ride_requests_screen.dart';
@@ -35,8 +35,14 @@ class _DraggableSheetState extends State<DraggableSheet> {
         await Provider.of<GoogleMapsProvider>(context, listen: false)
             .findRidesDriver();
       } else {
-        await Provider.of<GoogleMapsProvider>(context, listen: false)
-            .findRidesPassenger();
+        final response =
+            await Provider.of<GoogleMapsProvider>(context, listen: false)
+                .findRidesPassenger();
+
+        response.data['data'].forEach(
+          (e) => Provider.of<RideRequestProvider>(context, listen: false)
+              .addRideRequest(e),
+        );
       }
 
       Navigator.of(context).pushNamed(RideRequestsScreen.routeName);

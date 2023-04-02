@@ -31,6 +31,7 @@ class GoogleMapsProvider with ChangeNotifier {
   bool get loading => _loading;
 
   void setMapController(GoogleMapController mapController) {
+    if (_mapController != null) return;
     _mapController = mapController;
     notifyListeners();
   }
