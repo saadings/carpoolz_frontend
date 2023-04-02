@@ -17,7 +17,7 @@ class _RideRequestsState extends State<RideRequests> {
   @override
   Widget build(BuildContext context) {
     final rideRequests = Provider.of<RideRequestProvider>(context).rideRequests;
-    print("ride length: ${rideRequests.length}");
+
     return Container(
       child: ListView.builder(
         itemBuilder: (ctx, index) => ListTile(

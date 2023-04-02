@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -35,11 +37,18 @@ class GoogleMapsProvider with ChangeNotifier {
 
   void setCurrentPosition(Position position) {
     _currentPosition = position;
+
     notifyListeners();
   }
 
   Future<void> getCurrentLocation() async {
     if (_currentPosition != null) {
+      // await _mapController?.animateCamera(
+      //   CameraUpdate.newLatLngZoom(
+      //     LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+      //     18,
+      //   ),
+      // );
       return;
     }
 
@@ -153,12 +162,34 @@ class GoogleMapsProvider with ChangeNotifier {
         ),
       );
 
-      await _mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(
-          position.destination!,
-          12.5,
+      LatLngBounds bounds = LatLngBounds(
+        southwest: _polylineCoordinates.reduce(
+          (value, element) => LatLng(
+            min(value.latitude, element.latitude),
+            min(value.longitude, element.longitude),
+          ),
+        ),
+        northeast: _polylineCoordinates.reduce(
+          (value, element) => LatLng(
+            max(value.latitude, element.latitude),
+            max(value.longitude, element.longitude),
+          ),
         ),
       );
+
+      await _mapController!.animateCamera(
+        await CameraUpdate.newLatLngBounds(
+          bounds,
+          60,
+        ),
+      );
+
+      // await _mapController?.animateCamera(
+      //   CameraUpdate.newLatLngZoom(
+      //     position.destination!,
+      //     12.5,
+      //   ),
+      // );
 
       notifyListeners();
     } catch (e) {}

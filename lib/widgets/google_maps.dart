@@ -18,8 +18,8 @@ class _GoogleMapsState extends State<GoogleMaps> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    await _getCurrentLocation();
     if (_firstTime) {
+      await _getCurrentLocation();
       await _loadMapStyles();
       _firstTime = false;
     }
