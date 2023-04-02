@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/google_maps_provider.dart';
+import '../providers/ride_requests_provider.dart';
+import '../screens/ride_requests_screen.dart';
 import '../screens/ride_requests_screen.dart';
 import '../widgets/google_auto_complete.dart';
+import '../widgets/small_loading.dart';
 import '../widgets/small_loading.dart';
 
 class DraggableSheet extends StatefulWidget {
@@ -19,6 +22,7 @@ class DraggableSheet extends StatefulWidget {
 }
 
 class _DraggableSheetState extends State<DraggableSheet> {
+  bool _firstTime = true;
   bool _loading = false;
 
   Future<void> _findRides() async {
@@ -64,6 +68,39 @@ class _DraggableSheetState extends State<DraggableSheet> {
       );
     }
   }
+
+  @override
+  void didChangeDependencies() {
+    if (_firstTime) {
+      try {
+        Provider.of<RideRequestProvider>(
+          context,
+          listen: false,
+        ).connectSocket();
+
+        final _userName = Provider.of<RideRequestProvider>(
+          context,
+          listen: false,
+        ).userName;
+
+        Provider.of<RideRequestProvider>(
+          context,
+          listen: false,
+        ).getRideRequests(_userName);
+      } catch (e) {
+        print("Error ${e.toString()}");
+      }
+
+      _firstTime = false;
+    }
+    super.didChangeDependencies();
+  }
+
+  // @override
+  // void dispose() {
+  //   Provider.of<RideRequestProvider>(context, listen: false).disconnectSocket();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

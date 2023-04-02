@@ -12,33 +12,7 @@ class RideRequests extends StatefulWidget {
 }
 
 class _RideRequestsState extends State<RideRequests> {
-  bool _firstTime = true;
   final rideRequests = [];
-
-  @override
-  void didChangeDependencies() {
-    if (_firstTime) {
-      try {
-        Provider.of<RideRequestProvider>(context, listen: false)
-            .connectSocket();
-        final _userName =
-            Provider.of<RideRequestProvider>(context, listen: false).userName;
-        Provider.of<RideRequestProvider>(context, listen: false)
-            .getRideRequests("abdullah1234");
-      } catch (e) {
-        print("Error ${e.toString()}");
-      }
-
-      _firstTime = false;
-    }
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    // Provider.of<RideRequestProvider>(context, listen: false).disconnectSocket();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
