@@ -28,12 +28,18 @@ class _RideRequestsState extends State<RideRequests> {
                 await showDialog(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: Text("Ride Request"),
-                    content: Text("Do you want to accept this ride request?"),
+                    title: Text("Driver Request"),
+                    content: Text("Do you want to contact this driver?"),
                     actions: [
                       TextButton(
                         onPressed: () {
                           print(rideRequests[index].toString());
+                          Provider.of<RideRequestProvider>(context,
+                                  listen: false)
+                              .emitRideRequest(
+                            rideRequests[index]['userName'].toString(),
+                            rideRequests[index],
+                          );
                           Navigator.of(context).pop();
                         },
                         child: Text("No"),

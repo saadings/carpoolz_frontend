@@ -74,6 +74,11 @@ class RideRequestProvider with ChangeNotifier {
     });
   }
 
+  void emitRideRequest(String event, Map<String, dynamic> data) {
+    SocketService socketService = SocketService();
+    socketService.emit(event, data);
+  }
+
   // void removeRideRequest(String rideRequestId) {
   //   _rideRequests.removeWhere((rideRequest) => rideRequest['id'] == rideRequestId);
   //   notifyListeners();

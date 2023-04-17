@@ -35,4 +35,10 @@ class SocketService {
       _socket!.on(event, callback);
     }
   }
+
+  void emit(String event, dynamic data) {
+    if (_socket != null) {
+      _socket!.emit(event, data);
+    }
+  }
 }
