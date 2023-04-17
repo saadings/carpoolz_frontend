@@ -34,12 +34,16 @@ class _RideRequestsState extends State<RideRequests> {
                       TextButton(
                         onPressed: () {
                           print(rideRequests[index].toString());
-                          Provider.of<RideRequestProvider>(context,
-                                  listen: false)
-                              .emitRideRequest(
-                            rideRequests[index]['userName'].toString(),
-                            rideRequests[index],
-                          );
+                          try {
+                            Provider.of<RideRequestProvider>(context,
+                                    listen: false)
+                                .emitRideRequest(
+                              rideRequests[index]['userName'].toString(),
+                              rideRequests[index],
+                            );
+                          } catch (e) {
+                            print(e.toString());
+                          }
                           Navigator.of(context).pop();
                         },
                         child: Text("No"),
