@@ -32,10 +32,10 @@ class _RideRequestsState extends State<RideRequests> {
                     content: Text("Do you want to contact this driver?"),
                     actions: [
                       TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           print(rideRequests[index].toString());
                           try {
-                            Provider.of<RideRequestProvider>(context,
+                            await Provider.of<RideRequestProvider>(context,
                                     listen: false)
                                 .emitRideRequest(
                               rideRequests[index]['userName'].toString(),
