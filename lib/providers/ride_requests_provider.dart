@@ -42,7 +42,7 @@ class RideRequestProvider with ChangeNotifier {
   // }
 
   void connectSocket() {
-    SocketService socketService = SocketService();
+    Socket socketService = Socket();
     socketService.connect();
 
     socketService.on('connect', (_) {
@@ -55,7 +55,7 @@ class RideRequestProvider with ChangeNotifier {
   }
 
   void disconnectSocket() {
-    SocketService socketService = SocketService();
+    Socket socketService = Socket();
     socketService.disconnect();
   }
 
@@ -67,16 +67,19 @@ class RideRequestProvider with ChangeNotifier {
   }
 
   void getRideRequests(String event) {
-    SocketService socketService = SocketService();
+    Socket socketService = Socket();
     socketService.on(event, (data) {
       print("This is the data! $data");
       addRideRequest(data);
     });
   }
 
-  void emitRideRequest(String event, Map<String, dynamic> data) {
-    SocketService socketService = SocketService();
-    socketService.emit(event, data);
+  Future<void> emitRideRequest(String event, Map<String, dynamic> data) async {
+    Socket socketService = Socket();
+    // print("Emitting data: $data");
+    // print("Emitting event: $event");
+    final response = await socketService.emit(event, data);
+    print("Response: $response");
   }
 
   // void removeRideRequest(String rideRequestId) {

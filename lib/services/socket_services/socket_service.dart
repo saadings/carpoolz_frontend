@@ -1,15 +1,17 @@
+import 'package:dio/dio.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import '../api_services/socket_service.dart';
 
-class SocketService {
-  static final SocketService _instance = SocketService._internal();
+class Socket {
+  static final Socket _instance = Socket._internal();
 
-  factory SocketService() {
+  factory Socket() {
     return _instance;
   }
 
   IO.Socket? _socket;
 
-  SocketService._internal();
+  Socket._internal();
 
   void connect() {
     if (_socket == null) {
@@ -36,9 +38,12 @@ class SocketService {
     }
   }
 
-  void emit(String event, dynamic data) {
-    if (_socket != null) {
-      _socket!.emit(event, data);
-    }
+  Future<Response> emit(String event, dynamic data) async {
+    // if (_socket != null) {
+    // _socket!.emit(event, data);
+    // }
+    final response = await SocketService().emit(event, data);
+
+    return response;
   }
 }

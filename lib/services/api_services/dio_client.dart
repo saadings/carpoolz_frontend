@@ -7,7 +7,8 @@ class DioClient {
   static Dio get dio {
     if (_dio == null) {
       _dio = Dio(BaseOptions(
-        baseUrl: 'https://carpoolz.herokuapp.com',
+        // baseUrl: 'https://carpoolz.herokuapp.com',
+        baseUrl: 'http://localhost:8000',
         connectTimeout: const Duration(seconds: 10), // 5 seconds
         // receiveTimeout: 5000, // 5 seconds
       ));
