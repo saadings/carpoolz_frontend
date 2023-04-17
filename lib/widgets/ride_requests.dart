@@ -19,35 +19,66 @@ class _RideRequestsState extends State<RideRequests> {
     final rideRequests = Provider.of<RideRequestProvider>(context).rideRequests;
 
     return Container(
+      padding: EdgeInsets.only(top: 7.5),
       child: ListView.builder(
-        itemBuilder: (ctx, index) => ListTile(
-          onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: Text("Ride Request"),
-                content: Text("Do you want to accept this ride request?"),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("No"),
+        itemBuilder: (ctx, index) => Column(
+          children: [
+            ListTile(
+              onTap: () async {
+                await showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text("Ride Request"),
+                    content: Text("Do you want to accept this ride request?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          print(rideRequests[index].toString());
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("No"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context)
+                              .pushNamed(ConfirmRideScreen.routeName);
+                        },
+                        child: Text("Yes"),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context)
-                          .pushNamed(ConfirmRideScreen.routeName);
-                    },
-                    child: Text("Yes"),
+                );
+              },
+              // enableFeedback: true,
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white70,
+              ),
+              leading: CircleAvatar(
+                child: Text(
+                  rideRequests[index]['userName'][0].toString().toUpperCase(),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: Theme.of(context).accentColor,
+              ),
+              title: Text(rideRequests[index]['userName'].toString()),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Longitude: ${rideRequests[index]['origin']['longitude']['\$numberDecimal']}",
+                  ),
+                  Text(
+                    "Latitude: ${rideRequests[index]['origin']['latitude']['\$numberDecimal']}",
                   ),
                 ],
               ),
-            );
-          },
-          title: Text(rideRequests[index]['userName'].toString()),
-          subtitle: Text(rideRequests[index]['origin'].toString()),
+            ),
+            Divider(),
+          ],
         ),
         itemCount: rideRequests.length,
       ),

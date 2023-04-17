@@ -25,7 +25,21 @@ class _HomeScreenState extends State<HomeScreen> {
       elevation: 5,
       // backgroundColor: Color.fromRGBO(156, 39, 176, 0.4),
       actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.person_4))
+        InkWell(
+          onTap: () {},
+          // borderRadius: BorderRadius.circular(1000),
+          child: CircleAvatar(
+            child: Text(
+              "SN",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.purple,
+              ),
+            ),
+            backgroundColor: Colors.black87,
+          ),
+        ),
+
         // Padding(
         //   padding: const EdgeInsets.all(8.0),
         //   child: InkWell(

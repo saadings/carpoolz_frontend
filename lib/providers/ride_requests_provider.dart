@@ -4,11 +4,36 @@ import '../services/socket_services/socket_service.dart';
 
 class RideRequestProvider with ChangeNotifier {
   String userName = "";
-  var _rideRequests = [];
+  List<Map<String, dynamic>> _rideRequests = [
+    {
+      "userName": "Saad",
+      "origin": {
+        "longitude": {"\$numberDecimal": "74.4034771"},
+        "latitude": {"\$numberDecimal": "31.4859315"},
+        "_id": {"\$oid": "643a76fc4d00792c6b1db867"}
+      },
+    },
+    {
+      "userName": "Addullah",
+      "origin": {
+        "longitude": {"\$numberDecimal": "74.4034771"},
+        "latitude": {"\$numberDecimal": "31.4859315"},
+        "_id": {"\$oid": "643a76fc4d00792c6b1db867"}
+      },
+    },
+    {
+      "userName": "Laiba",
+      "origin": {
+        "longitude": {"\$numberDecimal": "74.4034771"},
+        "latitude": {"\$numberDecimal": "31.4859315"},
+        "_id": {"\$oid": "643a76fc4d00792c6b1db867"}
+      },
+    },
+  ];
 
   RideRequestProvider({required this.userName});
 
-  get rideRequests {
+  List<Map<String, dynamic>> get rideRequests {
     return [..._rideRequests];
   }
 
@@ -34,8 +59,8 @@ class RideRequestProvider with ChangeNotifier {
     socketService.disconnect();
   }
 
-  void addRideRequest(var rideRequest) {
-    print("ride req data: ${rideRequest}");
+  void addRideRequest(Map<String, dynamic> rideRequest) {
+    // print("ride req data: ${rideRequest}");
     _rideRequests.add(rideRequest);
     // print(_rideRequests[0]);
     notifyListeners();
