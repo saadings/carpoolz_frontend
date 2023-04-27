@@ -20,6 +20,24 @@
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"
+    },
+    {
+      "name": "SM A515F",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "10.229.110.61:5555"
+    },
+    {
+      "name": "SM G950F",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "192.168.135.171:5554"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "All Devices",
+      "configurations": ["SM A515F", "SM G950F"]
     }
   ]
 }

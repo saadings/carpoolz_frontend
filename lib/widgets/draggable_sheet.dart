@@ -38,11 +38,16 @@ class _DraggableSheetState extends State<DraggableSheet> {
         final response =
             await Provider.of<GoogleMapsProvider>(context, listen: false)
                 .findRidesPassenger();
+        print(response.data['data']);
+        bool containsOnlyNulls =
+            response.data['data'].every((element) => element == null);
 
-        response.data['data']?.forEach(
-          (e) => Provider.of<RideRequestProvider>(context, listen: false)
-              .addRideRequest(e),
-        );
+        if (!containsOnlyNulls) {
+          response.data['data']?.forEach(
+            (e) => Provider.of<RideRequestProvider>(context, listen: false)
+                .addRideRequest(e),
+          );
+        }
       }
 
       Navigator.of(context).pushNamed(RideRequestsScreen.routeName);
@@ -79,16 +84,6 @@ class _DraggableSheetState extends State<DraggableSheet> {
           context,
           listen: false,
         ).connectSocket();
-
-        final _userName = Provider.of<RideRequestProvider>(
-          context,
-          listen: false,
-        ).userName;
-
-        Provider.of<RideRequestProvider>(
-          context,
-          listen: false,
-        ).getRideRequests(_userName);
       } catch (e) {
         print("Error ${e.toString()}");
       }

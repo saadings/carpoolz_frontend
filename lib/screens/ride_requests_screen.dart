@@ -11,7 +11,7 @@ class RideRequestsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Driver Requests'),
+        title: Text('Ride Requests'),
       ),
       body: RideRequests(),
     );
