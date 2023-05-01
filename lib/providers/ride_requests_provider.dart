@@ -65,9 +65,14 @@ class RideRequestProvider with ChangeNotifier {
 
   void addRideRequest(Map<String, dynamic> rideRequest) {
     // print("ride req data: ${rideRequest}");
-    _rideRequests.add(rideRequest);
+    if (!_rideRequests.contains(rideRequest)) {
+      _rideRequests.add(rideRequest);
+      notifyListeners();
+    }
+
+    // _rideRequests.insert(index, rideRequest);
     // print(_rideRequests[0]);
-    notifyListeners();
+    // notifyListeners();
   }
 
   void getRideRequests(String event) {

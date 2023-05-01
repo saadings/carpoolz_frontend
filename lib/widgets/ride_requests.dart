@@ -114,8 +114,10 @@ class _RideRequestsState extends State<RideRequests> {
 
                 Provider.of<GoogleMapsProvider>(context, listen: false)
                     .setMarker(LatLng(
-                  rideRequests[index]['origin']['latitude']['\$numberDecimal'],
-                  rideRequests[index]['origin']['longitude']['\$numberDecimal'],
+                  double.parse(rideRequests[index]['origin']['latitude']
+                      ['\$numberDecimal']),
+                  double.parse(rideRequests[index]['origin']['longitude']
+                      ['\$numberDecimal']),
                 ));
                 Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
               } catch (e) {
