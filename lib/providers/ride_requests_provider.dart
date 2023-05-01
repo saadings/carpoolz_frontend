@@ -65,7 +65,10 @@ class RideRequestProvider with ChangeNotifier {
 
   void addRideRequest(Map<String, dynamic> rideRequest) {
     // print("ride req data: ${rideRequest}");
-    if (!_rideRequests.contains(rideRequest)) {
+
+    int index = _rideRequests.indexWhere(
+        (element) => element['userName'] == rideRequest['userName']);
+    if (index == -1) {
       _rideRequests.add(rideRequest);
       notifyListeners();
     }
