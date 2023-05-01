@@ -1,11 +1,12 @@
-import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
-import 'package:carpoolz_frontend/widgets/google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/message.dart';
 import '../providers/user_provider.dart';
+import '../providers/ride_requests_provider.dart';
 import '../providers/chat_room_provider.dart';
+
+import '../widgets/google_maps.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   static const String routeName = '/chat-room';

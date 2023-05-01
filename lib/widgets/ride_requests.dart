@@ -1,4 +1,3 @@
-import 'package:carpoolz_frontend/providers/chat_room_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -6,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/ride_requests_provider.dart';
 import '../providers/user_provider.dart';
+import '../providers/chat_room_provider.dart';
 import '../providers/google_maps_provider.dart';
 
 import '../screens/chat_room_screen.dart';

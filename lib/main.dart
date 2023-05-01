@@ -1,4 +1,3 @@
-import 'package:carpoolz_frontend/widgets/google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,8 @@ import './screens/home_screen.dart';
 import './screens/ride_requests_screen.dart';
 import './screens/confirm_ride_screen.dart';
 import './screens/chat_room_screen.dart';
+
+import './widgets/google_maps.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -90,7 +91,8 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const ChatRoomScreen(),
+        home: const LoginScreen(),
+        // home: const ChatRoomScreen(),
         // home: const HomeScreen(),
         // home: const RegisterDriverScreen(),
         routes: {
