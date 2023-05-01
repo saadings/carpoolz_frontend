@@ -5,7 +5,8 @@ import 'package:provider/provider.dart';
 import './providers/user_provider.dart';
 import './providers/driver_provider.dart';
 import './providers/google_maps_provider.dart';
-import '../providers/ride_requests_provider.dart';
+import './providers/ride_requests_provider.dart';
+import './providers/chat_room_provider.dart';
 
 import './screens/login_screen.dart';
 import './screens/register_screen.dart';
@@ -14,6 +15,7 @@ import './screens/otp_screen.dart';
 import './screens/home_screen.dart';
 import './screens/ride_requests_screen.dart';
 import './screens/confirm_ride_screen.dart';
+import './screens/chat_room_screen.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -47,6 +49,14 @@ class MyApp extends StatelessWidget {
           create: (_) => RideRequestProvider(userName: ""),
           update: (context, value, previous) => RideRequestProvider(
             userName: value.userName,
+          ),
+        ),
+        ChangeNotifierProxyProvider<UserProvider, ChatRoomProvider>(
+          create: (_) =>
+              ChatRoomProvider(senderName: "", senderType: Type.passenger),
+          update: (context, value, previous) => ChatRoomProvider(
+            senderName: value.userName,
+            senderType: value.currentType,
           ),
         ),
       ],
@@ -89,6 +99,7 @@ class MyApp extends StatelessWidget {
           HomeScreen.routeName: (ctx) => const HomeScreen(),
           RideRequestsScreen.routeName: (ctx) => const RideRequestsScreen(),
           ConfirmRideScreen.routeName: (ctx) => const ConfirmRideScreen(),
+          ChatRoomScreen.routeName: (ctx) => const ChatRoomScreen(),
         },
       ),
     );

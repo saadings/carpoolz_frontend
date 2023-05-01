@@ -30,11 +30,15 @@ class RideRequestProvider with ChangeNotifier {
     //   },
     // },
   ];
-
+  bool _requestingRide = false;
   RideRequestProvider({required this.userName});
 
   List<Map<String, dynamic>> get rideRequests {
     return [..._rideRequests];
+  }
+
+  bool get requestingRide {
+    return _requestingRide;
   }
 
   // String get userName {
@@ -78,8 +82,30 @@ class RideRequestProvider with ChangeNotifier {
     Socket socketService = Socket();
     // print("Emitting data: $data");
     // print("Emitting event: $event");
-    final response = await socketService.emit(event, data);
-    print("Response: $response");
+    try {
+      final response = await socketService.emit(event, data);
+      print("Response: $response");
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  void startChatRequest() {
+    _requestingRide = true;
+    notifyListeners();
+  }
+
+  void receiveChatRequest() {
+    Socket socketService = Socket();
+    socketService.on(
+      '$userName/chat',
+      (data) {
+        print("This is the data! $data");
+        _requestingRide = false;
+        notifyListeners();
+        // Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
+      },
+    );
   }
 
   // void removeRideRequest(String rideRequestId) {

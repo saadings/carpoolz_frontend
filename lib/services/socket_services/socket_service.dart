@@ -42,8 +42,11 @@ class Socket {
     // if (_socket != null) {
     // _socket!.emit(event, data);
     // }
-    final response = await SocketService().emit(event, data);
-
-    return response;
+    try {
+      final response = await SocketService().emit(event, data);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

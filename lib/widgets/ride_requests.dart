@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/providers/chat_room_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../providers/ride_requests_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/google_maps_provider.dart';
+
+import '../screens/chat_room_screen.dart';
 
 class RideRequests extends StatefulWidget {
   const RideRequests({super.key});
@@ -19,6 +22,14 @@ class _RideRequestsState extends State<RideRequests> {
 
   @override
   void didChangeDependencies() {
+    // final requestingRide = Provider.of<RideRequestProvider>(
+    //   context,
+    //   listen: false,
+    // ).requestingRide;
+
+    // if (requestingRide) {
+    //   Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
+    // }
     if (!_firstTime) {
       final _userName = Provider.of<RideRequestProvider>(
         context,
@@ -35,7 +46,7 @@ class _RideRequestsState extends State<RideRequests> {
     super.didChangeDependencies();
   }
 
-  Future<void> _showPassengerDialog(var rideRequests) async {
+  Future<void> _showPassengerDialog(var rideRequests, int index) async {
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -69,11 +80,9 @@ class _RideRequestsState extends State<RideRequests> {
                   },
                 };
 
-                // print("USER DATA: $userData");
-
                 await Provider.of<RideRequestProvider>(context, listen: false)
                     .emitRideRequest(
-                  rideRequests[0]['userName'].toString(),
+                  rideRequests[index]['userName'].toString(),
                   userData,
                 );
 
@@ -85,10 +94,27 @@ class _RideRequestsState extends State<RideRequests> {
                   ),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                Provider.of<ChatRoomProvider>(
+                  context,
+                  listen: false,
+                ).setReceiverName(rideRequests[index]['userName'].toString());
+
+                Provider.of<RideRequestProvider>(
+                  context,
+                  listen: false,
+                ).startChatRequest();
+
+                Provider.of<RideRequestProvider>(
+                  context,
+                  listen: false,
+                ).receiveChatRequest();
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
               } catch (e) {
                 print(e.toString());
               } finally {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
               }
               // Navigator.of(context).pushNamed(ConfirmRideScreen.routeName);
             },
@@ -99,7 +125,7 @@ class _RideRequestsState extends State<RideRequests> {
     );
   }
 
-  Future<void> _showDriverDialog() async {
+  Future<void> _showDriverDialog(var rideRequests, int index) async {
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -115,22 +141,33 @@ class _RideRequestsState extends State<RideRequests> {
           TextButton(
             onPressed: () async {
               try {
-                // await Provider.of<RideRequestProvider>(context, listen: false)
-                //     .emitRideRequest(
-                //   rideRequests[0]['userName'].toString(),
-                //   rideRequests[0],
-                // );
+                await Provider.of<RideRequestProvider>(context, listen: false)
+                    .emitRideRequest(
+                  "${rideRequests[index]['userName'].toString()}/chat",
+                  {
+                    "startChat": true,
+                  },
+                );
                 final snackBar = SnackBar(
                   content: const Text(
-                    'Ride Request Sent!',
+                    'Chat Request Sent!',
                     textAlign: TextAlign.center,
                   ),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                Provider.of<ChatRoomProvider>(
+                  context,
+                  listen: false,
+                ).setReceiverName(rideRequests[index]['userName'].toString());
+
+                Navigator.of(context).pop();
+
+                Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
               } catch (e) {
                 print(e.toString());
               } finally {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
               }
               // Navigator.of(context).pushNamed(ConfirmRideScreen.routeName);
             },
@@ -144,76 +181,82 @@ class _RideRequestsState extends State<RideRequests> {
   @override
   Widget build(BuildContext context) {
     final rideRequests = Provider.of<RideRequestProvider>(context).rideRequests;
-
+    // final requestingRide =
+    //     Provider.of<RideRequestProvider>(context).requestingRide;
+    // final currentType = Provider.of<UserProvider>(context).currentType;
     return Container(
       padding: EdgeInsets.only(top: 7.5),
-      child: rideRequests.isEmpty
-          ? Center(
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.hourglass_bottom_rounded,
-                  size: 50,
-                  color: Colors.white70,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Waiting for Ride Requests",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ))
-          : ListView.builder(
-              itemBuilder: (ctx, index) => Column(
-                children: [
-                  ListTile(
-                    onTap: () async {
-                      Provider.of<UserProvider>(context, listen: false)
-                                  .currentType ==
-                              Type.passenger
-                          ? await _showPassengerDialog(rideRequests)
-                          : await _showDriverDialog();
-                    },
-                    // enableFeedback: true,
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
+      child:
+          // requestingRide && currentType == Type.passenger
+          //     ? CircularProgressIndicator()
+          //     :
+          rideRequests.isEmpty
+              ? Center(
+                  child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.hourglass_bottom_rounded,
+                      size: 50,
                       color: Colors.white70,
                     ),
-                    leading: CircleAvatar(
-                      child: Text(
-                        rideRequests[index]['userName'][0]
-                            .toString()
-                            .toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Waiting for Ride Requests",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ))
+              : ListView.builder(
+                  itemBuilder: (ctx, index) => Column(
+                    children: [
+                      ListTile(
+                        onTap: () async {
+                          Provider.of<UserProvider>(context, listen: false)
+                                      .currentType ==
+                                  Type.passenger
+                              ? await _showPassengerDialog(rideRequests, index)
+                              : await _showDriverDialog(rideRequests, index);
+                        },
+                        // enableFeedback: true,
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.white70,
+                        ),
+                        leading: CircleAvatar(
+                          child: Text(
+                            rideRequests[index]['userName'][0]
+                                .toString()
+                                .toUpperCase(),
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          backgroundColor: Theme.of(context).accentColor,
+                        ),
+                        title: Text(rideRequests[index]['userName'].toString()),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Longitude: ${rideRequests[index]['origin']['longitude']['\$numberDecimal']}",
+                            ),
+                            Text(
+                              "Latitude: ${rideRequests[index]['origin']['latitude']['\$numberDecimal']}",
+                            ),
+                          ],
                         ),
                       ),
-                      backgroundColor: Theme.of(context).accentColor,
-                    ),
-                    title: Text(rideRequests[index]['userName'].toString()),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Longitude: ${rideRequests[index]['origin']['longitude']['\$numberDecimal']}",
-                        ),
-                        Text(
-                          "Latitude: ${rideRequests[index]['origin']['latitude']['\$numberDecimal']}",
-                        ),
-                      ],
-                    ),
+                      Divider(),
+                    ],
                   ),
-                  Divider(),
-                ],
-              ),
-              itemCount: rideRequests.length,
-            ),
+                  itemCount: rideRequests.length,
+                ),
     );
   }
 }
