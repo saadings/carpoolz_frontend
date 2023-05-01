@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../providers/google_maps_provider.dart';
 
 class GoogleMaps extends StatefulWidget {
+  static const String routeName = '/google-map';
+  const GoogleMaps({super.key});
   @override
   _GoogleMapsState createState() => _GoogleMapsState();
 }

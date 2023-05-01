@@ -7,14 +7,14 @@ import '../services/socket_services/socket_service.dart';
 
 class ChatRoomProvider with ChangeNotifier {
   List<Message> _messages = [
-    Message('saaaadi16', 'Hello', Type.driver),
-    Message("laiba123", 'Hi', Type.passenger),
-    Message("laiba123", 'How are you?', Type.passenger),
-    Message("laiba123", 'I am fine, thank you.', Type.passenger),
-    Message("laiba123", 'How about you?', Type.driver),
-    Message("laiba123", 'I am fine too.', Type.driver),
-    Message("laiba123", 'Where are you from?', Type.passenger),
-    Message("laiba123", 'I am from India.', Type.passenger),
+    // Message('saaaadi16', 'Hello', Type.driver),
+    // Message("laiba123", 'Hi', Type.passenger),
+    // Message("laiba123", 'How are you?', Type.passenger),
+    // Message("laiba123", 'I am fine, thank you.', Type.passenger),
+    // Message("laiba123", 'How about you?', Type.driver),
+    // Message("laiba123", 'I am fine too.', Type.driver),
+    // Message("laiba123", 'Where are you from?', Type.passenger),
+    // Message("laiba123", 'I am from India.', Type.passenger),
   ];
   String _receiverName = "";
   String senderName = "";

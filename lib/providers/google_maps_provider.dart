@@ -132,6 +132,27 @@ class GoogleMapsProvider with ChangeNotifier {
     return [];
   }
 
+  Future<void> setMarker(LatLng position) async {
+    _markers.add(
+      Marker(
+        markerId: MarkerId(_markers.length.toString()),
+        position: position,
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueViolet,
+        ),
+        draggable: true,
+        onTap: await () async => await _mapController?.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(
+                  target: position,
+                  zoom: 18,
+                ),
+              ),
+            ),
+      ),
+    );
+  }
+
   Future<void> addMarker(
     GoogleMapsModel position,
     GooglePlace googlePlace,

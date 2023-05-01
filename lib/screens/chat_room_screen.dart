@@ -1,4 +1,5 @@
 import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
+import 'package:carpoolz_frontend/widgets/google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -94,7 +95,48 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Chat Room'),
+        // bottom: PreferredSizeWidget(
+        //   child: Container(
+        //     color: Theme.of(context).primaryColor,
+        //     height: 4.0,
+        //   ),
+        //   preferredSize: Size.fromHeight(4.0),
+        // ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(GoogleMaps.routeName);
+            },
+            icon: Icon(Icons.location_on),
+            splashRadius: 25,
+            tooltip: "View User Location",
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            // splashColor: Theme.of(context).accentColor,
+          ),
+          // TextButton(
+          //   style: TextButton.styleFrom(
+          //     primary: Colors.white,
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(50),
+          //     ),
+          //   ),
+          //   onPressed: () {},
+          //   child: Text("View Location"),
+          // )
+        ],
       ),
+      // bottomNavigationBar: NavigationBar(
+      //   destinations: [
+      //     // NavigationDestination(
+      //     //   icon: Icon(Icons.chat),
+      //     //   label: 'Chat',
+      //     // ),
+      //     NavigationDestination(
+      //       icon: Icon(Icons.location_on),
+      //       label: 'Location',
+      //     ),
+      //   ],
+      // ),
       body: _requestingRide && _userType == Type.passenger
           ? Center(
               child: Column(

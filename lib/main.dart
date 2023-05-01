@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/widgets/google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -89,7 +90,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const LoginScreen(),
+        home: const ChatRoomScreen(),
         // home: const HomeScreen(),
         // home: const RegisterDriverScreen(),
         routes: {
@@ -97,6 +98,7 @@ class MyApp extends StatelessWidget {
           RegisterDriverScreen.routeName: (ctx) => const RegisterDriverScreen(),
           OtpScreen.routeName: (ctx) => const OtpScreen(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),
+          GoogleMaps.routeName: (ctx) => const GoogleMaps(),
           RideRequestsScreen.routeName: (ctx) => const RideRequestsScreen(),
           ConfirmRideScreen.routeName: (ctx) => const ConfirmRideScreen(),
           ChatRoomScreen.routeName: (ctx) => const ChatRoomScreen(),

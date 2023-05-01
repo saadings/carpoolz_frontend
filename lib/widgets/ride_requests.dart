@@ -1,6 +1,7 @@
 import 'package:carpoolz_frontend/providers/chat_room_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/ride_requests_provider.dart';
@@ -110,6 +111,12 @@ class _RideRequestsState extends State<RideRequests> {
                   listen: false,
                 ).receiveChatRequest();
                 Navigator.of(context).pop();
+
+                Provider.of<GoogleMapsProvider>(context, listen: false)
+                    .setMarker(LatLng(
+                  rideRequests[index]['origin']['latitude']['\$numberDecimal'],
+                  rideRequests[index]['origin']['longitude']['\$numberDecimal'],
+                ));
                 Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
               } catch (e) {
                 print(e.toString());
@@ -162,7 +169,11 @@ class _RideRequestsState extends State<RideRequests> {
                 ).setReceiverName(rideRequests[index]['userName'].toString());
 
                 Navigator.of(context).pop();
-
+                Provider.of<GoogleMapsProvider>(context, listen: false)
+                    .setMarker(LatLng(
+                  rideRequests[index]['origin']['latitude']['\$numberDecimal'],
+                  rideRequests[index]['origin']['longitude']['\$numberDecimal'],
+                ));
                 Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
               } catch (e) {
                 print(e.toString());
