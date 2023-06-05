@@ -16,6 +16,8 @@ import './screens/home_screen.dart';
 import './screens/ride_requests_screen.dart';
 import './screens/confirm_ride_screen.dart';
 import './screens/chat_room_screen.dart';
+import './screens/register_vendor_screen.dart';
+import './screens/register_store_screen.dart';
 
 import './widgets/google_maps.dart';
 
@@ -98,12 +100,15 @@ class MyApp extends StatelessWidget {
         routes: {
           RegisterScreen.routeName: (ctx) => const RegisterScreen(),
           RegisterDriverScreen.routeName: (ctx) => const RegisterDriverScreen(),
+          RegisterVendorScreen.routeName: (ctx) => const RegisterVendorScreen(),
+          RegisterStoreScreen.routeName: (ctx) => const RegisterStoreScreen(), 
           OtpScreen.routeName: (ctx) => const OtpScreen(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),
           GoogleMaps.routeName: (ctx) => const GoogleMaps(),
           RideRequestsScreen.routeName: (ctx) => const RideRequestsScreen(),
           ConfirmRideScreen.routeName: (ctx) => const ConfirmRideScreen(),
           ChatRoomScreen.routeName: (ctx) => const ChatRoomScreen(),
+
         },
       ),
     );
