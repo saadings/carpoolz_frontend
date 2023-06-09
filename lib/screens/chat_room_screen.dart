@@ -6,7 +6,9 @@ import '../providers/user_provider.dart';
 import '../providers/ride_requests_provider.dart';
 import '../providers/chat_room_provider.dart';
 
+import '../screens/confirm_ride_screen.dart';
 import '../widgets/google_maps.dart';
+import '../widgets/small_loading.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   static const String routeName = '/chat-room';
@@ -20,11 +22,29 @@ class ChatRoomScreen extends StatefulWidget {
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final TextEditingController _textController = TextEditingController();
   bool _loading = false;
+  bool _firstTime = true;
 
-  void initState() {
-    Provider.of<ChatRoomProvider>(context, listen: false).connectSocket();
-    Provider.of<ChatRoomProvider>(context, listen: false).receiveMessage();
-    super.initState();
+  @override
+  void didChangeDependencies() {
+    if (_firstTime) {
+      Provider.of<ChatRoomProvider>(
+        context,
+        listen: false,
+      ).connectSocket();
+
+      Provider.of<ChatRoomProvider>(
+        context,
+        listen: false,
+      ).receiveMessage();
+
+      Provider.of<ChatRoomProvider>(
+        context,
+        listen: false,
+      ).receiveStartRideRequest(context);
+
+      _firstTime = false;
+    }
+    super.didChangeDependencies();
   }
 
   void _handleSubmitted(String text) async {
@@ -66,6 +86,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       child: Row(
         children: <Widget>[
           Flexible(
+            // fit: FlexFit.loose,
+            // flex: 5,
             child: TextField(
               controller: _textController,
               onSubmitted: _handleSubmitted,
@@ -92,17 +114,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     final bool _requestingRide =
         Provider.of<RideRequestProvider>(context).requestingRide;
 
+    // final bool _startRide = Provider.of<ChatRoomProvider>(context).startRide;
+
     final _userType = Provider.of<UserProvider>(context).currentType;
     return Scaffold(
       appBar: AppBar(
         title: Text('Chat Room'),
-        // bottom: PreferredSizeWidget(
-        //   child: Container(
-        //     color: Theme.of(context).primaryColor,
-        //     height: 4.0,
-        //   ),
-        //   preferredSize: Size.fromHeight(4.0),
-        // ),
         actions: [
           IconButton(
             onPressed: () {
@@ -114,30 +131,30 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             padding: EdgeInsets.symmetric(horizontal: 15),
             // splashColor: Theme.of(context).accentColor,
           ),
-          // TextButton(
-          //   style: TextButton.styleFrom(
-          //     primary: Colors.white,
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(50),
-          //     ),
-          //   ),
-          //   onPressed: () {},
-          //   child: Text("View Location"),
-          // )
         ],
       ),
-      // bottomNavigationBar: NavigationBar(
-      //   destinations: [
-      //     // NavigationDestination(
-      //     //   icon: Icon(Icons.chat),
-      //     //   label: 'Chat',
-      //     // ),
-      //     NavigationDestination(
-      //       icon: Icon(Icons.location_on),
-      //       label: 'Location',
-      //     ),
-      //   ],
-      // ),
+      floatingActionButton: FloatingActionButton.small(
+        tooltip: "Start Ride",
+        backgroundColor: Theme.of(context).accentColor,
+        onPressed: () {
+          if (_requestingRide) return;
+          Provider.of<ChatRoomProvider>(
+            context,
+            listen: false,
+          ).startRideRequest();
+
+          Navigator.of(context).pushNamed(ConfirmRideScreen.routeName);
+        },
+        child: _requestingRide && _userType == Type.passenger
+            ? SmallLoading()
+            : Text(
+                'GO',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+        // label: Text('GO', style: TextStyle(color: Colors.white)),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       body: _requestingRide && _userType == Type.passenger
           ? Center(
               child: Column(

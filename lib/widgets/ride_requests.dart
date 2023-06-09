@@ -1,3 +1,5 @@
+import 'package:carpoolz_frontend/services/api_services/ride_service.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,8 +21,9 @@ class RideRequests extends StatefulWidget {
 
 class _RideRequestsState extends State<RideRequests> {
   // var rideRequests = [];
+  var _currentType = Type.passenger;
+  var _userName = "";
   bool _firstTime = false;
-
   @override
   void didChangeDependencies() {
     // final requestingRide = Provider.of<RideRequestProvider>(
@@ -32,11 +35,13 @@ class _RideRequestsState extends State<RideRequests> {
     //   Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
     // }
     if (!_firstTime) {
-      final _userName = Provider.of<RideRequestProvider>(
+      _userName = Provider.of<RideRequestProvider>(
         context,
         listen: false,
       ).userName;
 
+      _currentType =
+          Provider.of<UserProvider>(context, listen: false).currentType;
       Provider.of<RideRequestProvider>(
         context,
         listen: false,
@@ -45,6 +50,46 @@ class _RideRequestsState extends State<RideRequests> {
       _firstTime = true;
     }
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    // final _currentType =
+    //     Provider.of<UserProvider>(context, listen: false).currentType;
+
+    // if (_currentType == Type.driver) {
+    //   Provider.of<GoogleMapsProvider>(context, listen: false).deActiveDriver();
+    // } else if (_currentType == Type.passenger) {
+    //   Provider.of<GoogleMapsProvider>(context, listen: false)
+    //       .deActivePassenger();
+    // }
+
+    _deActivateUser();
+
+    super.dispose();
+  }
+
+  Future<void> _deActivateUser() async {
+    if (_currentType == Type.driver) {
+      try {
+        final Response response = await RideService().deActiveDriver(
+          _userName,
+        );
+        // return response;
+        print(response.data);
+      } catch (e) {
+        print(e.toString());
+      }
+    } else if (_currentType == Type.passenger) {
+      try {
+        final Response response = await RideService().deActivePassenger(
+          _userName,
+        );
+        print(response.data);
+      } catch (e) {
+        print(e.toString());
+      }
+    }
   }
 
   Future<void> _showPassengerDialog(var rideRequests, int index) async {
@@ -78,6 +123,16 @@ class _RideRequestsState extends State<RideRequests> {
                   "origin": {
                     "latitude": {"\$numberDecimal": userPosition?.latitude},
                     "longitude": {"\$numberDecimal": userPosition?.longitude},
+                  },
+                  "destination": {
+                    "latitude": {
+                      "\$numberDecimal": rideRequests[index]['destination']
+                          ['latitude']['\$numberDecimal']
+                    },
+                    "longitude": {
+                      "\$numberDecimal": rideRequests[index]['destination']
+                          ['longitude']['\$numberDecimal']
+                    },
                   },
                 };
 
@@ -113,12 +168,28 @@ class _RideRequestsState extends State<RideRequests> {
                 Navigator.of(context).pop();
 
                 Provider.of<GoogleMapsProvider>(context, listen: false)
-                    .setMarker(LatLng(
-                  double.parse(rideRequests[index]['origin']['latitude']
-                      ['\$numberDecimal']),
-                  double.parse(rideRequests[index]['origin']['longitude']
-                      ['\$numberDecimal']),
-                ));
+                    .setMarker(
+                  LatLng(
+                    double.parse(rideRequests[index]['origin']['latitude']
+                        ['\$numberDecimal']),
+                    double.parse(rideRequests[index]['origin']['longitude']
+                        ['\$numberDecimal']),
+                  ),
+                  color: BitmapDescriptor.hueRed,
+                );
+
+                Provider.of<GoogleMapsProvider>(context, listen: false)
+                    .setMarker(
+                  LatLng(
+                    double.parse(rideRequests[index]['destination']['latitude']
+                        ['\$numberDecimal']),
+                    double.parse(
+                      rideRequests[index]['destination']['longitude']
+                          ['\$numberDecimal'],
+                    ),
+                  ),
+                  color: BitmapDescriptor.hueRed,
+                );
                 Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
               } catch (e) {
                 print(e.toString());
@@ -172,10 +243,35 @@ class _RideRequestsState extends State<RideRequests> {
 
                 Navigator.of(context).pop();
                 Provider.of<GoogleMapsProvider>(context, listen: false)
-                    .setMarker(LatLng(
-                  rideRequests[index]['origin']['latitude']['\$numberDecimal'],
-                  rideRequests[index]['origin']['longitude']['\$numberDecimal'],
-                ));
+                    .setMarker(
+                  LatLng(
+                    rideRequests[index]['origin']['latitude']
+                        ['\$numberDecimal'],
+                    rideRequests[index]['origin']['longitude']
+                        ['\$numberDecimal'],
+                  ),
+                  // color: BitmapDescriptor.hueRed,
+                );
+                Provider.of<GoogleMapsProvider>(context, listen: false)
+                    .setMarker(
+                  LatLng(
+                    double.parse(rideRequests[index]['destination']['latitude']
+                        ['\$numberDecimal']),
+                    double.parse(rideRequests[index]['destination']['longitude']
+                        ['\$numberDecimal']),
+                  ),
+                  color: BitmapDescriptor.hueRed,
+                );
+                // Provider.of<GoogleMapsProvider>(context, listen: false)
+                //     .setMarker(
+                //   LatLng(
+                //     double.parse(rideRequests[index]['destination']['latitude']
+                //         ['\$numberDecimal']),
+                //     double.parse(rideRequests[index]['destination']['longitude']
+                //         ['\$numberDecimal']),
+                //   ),
+                //   color: BitmapDescriptor.hueRed,
+                // );
                 Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
               } catch (e) {
                 print(e.toString());

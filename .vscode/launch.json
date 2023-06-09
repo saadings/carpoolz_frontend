@@ -22,22 +22,22 @@
       "flutterMode": "release"
     },
     {
+      "name": "SM G950F",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "192.168.100.133:5556"
+    },
+    {
       "name": "SM J600F",
       "request": "launch",
       "type": "dart",
       "deviceId": "192.168.100.136:5555"
-    },
-    {
-      "name": "SM G950F",
-      "request": "launch",
-      "type": "dart",
-      "deviceId": "192.168.100.133:5554"
     }
   ],
   "compounds": [
     {
       "name": "All Devices",
-      "configurations": ["SM J600F", "SM G950F"]
+      "configurations": ["SM G950F", "SM J600F"]
     }
   ]
 }

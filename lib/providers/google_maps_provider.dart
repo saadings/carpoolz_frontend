@@ -132,13 +132,14 @@ class GoogleMapsProvider with ChangeNotifier {
     return [];
   }
 
-  Future<void> setMarker(LatLng position) async {
+  Future<void> setMarker(LatLng position,
+      {double color = BitmapDescriptor.hueViolet}) async {
     _markers.add(
       Marker(
         markerId: MarkerId(_markers.length.toString()),
         position: position,
         icon: BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueViolet,
+          color,
         ),
         draggable: true,
         onTap: await () async => await _mapController?.animateCamera(
@@ -268,6 +269,30 @@ class GoogleMapsProvider with ChangeNotifier {
         ),
         _markers[0].position,
         _route,
+      );
+      return response;
+      // print(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> deActiveDriver() async {
+    try {
+      final Response response = await RideService().deActiveDriver(
+        userName,
+      );
+      return response;
+      // print(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> deActivePassenger() async {
+    try {
+      final Response response = await RideService().deActivePassenger(
+        userName,
       );
       return response;
       // print(response.data);

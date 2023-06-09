@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/message.dart';
 import '../providers/user_provider.dart';
 import '../services/socket_services/socket_service.dart';
+import '../screens/confirm_ride_screen.dart';
 
 class ChatRoomProvider with ChangeNotifier {
   List<Message> _messages = [
@@ -24,6 +25,9 @@ class ChatRoomProvider with ChangeNotifier {
 
   List<Message> get messages => _messages;
   String get receiverName => _receiverName;
+  bool _startRide = false;
+
+  bool get startRide => _startRide;
 
   void addMessage(String userName, String text, Type userType) {
     _messages.insert(0, Message(userName, text, userType));
@@ -83,6 +87,78 @@ class ChatRoomProvider with ChangeNotifier {
         data['text'],
         data['user'] == "passenger" ? Type.passenger : Type.driver,
       );
+    });
+  }
+
+  void startRideRequest() {
+    Socket socketService = Socket();
+    socketService.emit(
+      "$_receiverName/start-ride",
+      {
+        'userName': senderName,
+        'user': senderType == Type.passenger ? "passenger" : "driver",
+      },
+    );
+    _startRide = true;
+    notifyListeners();
+  }
+
+  void receiveStartRideRequest(BuildContext context) {
+    Socket socketService = Socket();
+    socketService.on("$senderName/start-ride", (data) async {
+      print(data);
+
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Ride Request Conformation"),
+          content: Text("Do you want to confirm ride?"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+              child: Text("No"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // print(rideRequests[0].toString());
+                try {
+                  Socket socketService = Socket();
+                  socketService.emit(
+                    "$_receiverName/confirm-ride",
+                    {
+                      'userName': senderName,
+                      'user':
+                          senderType == Type.passenger ? "passenger" : "driver",
+                    },
+                  );
+                  _startRide = false;
+                  Navigator.of(context).pushNamed(ConfirmRideScreen.routeName);
+                  // notifyListeners();
+                } catch (e) {
+                  print(e.toString());
+                } finally {
+                  // Navigator.of(context).pop();
+                }
+              },
+              child: Text("Yes"),
+            ),
+          ],
+        ),
+      );
+
+      // _startRide = false;
+      // notifyListeners();
+    });
+  }
+
+  void receiveConfirmRide() {
+    Socket socketService = Socket();
+    socketService.on("$senderName/confirm-ride", (data) {
+      print(data);
+      _startRide = false;
+      notifyListeners();
     });
   }
 }
