@@ -10,7 +10,8 @@ class GoogleAutoCompleteVendor extends StatefulWidget {
   const GoogleAutoCompleteVendor({super.key});
 
   @override
-  State<GoogleAutoCompleteVendor> createState() => _GoogleAutoCompleteVendorState();
+  State<GoogleAutoCompleteVendor> createState() =>
+      _GoogleAutoCompleteVendorState();
 }
 
 class _GoogleAutoCompleteVendorState extends State<GoogleAutoCompleteVendor> {
@@ -59,6 +60,9 @@ class _GoogleAutoCompleteVendorState extends State<GoogleAutoCompleteVendor> {
                                 title: Text(option.description),
                                 onTap: () {
                                   onSelected(option);
+                                  // print(option.description);
+                                  // print(option.placeId);
+                                  // print(option.destination);
                                 },
                               ),
                               Divider(
@@ -73,25 +77,16 @@ class _GoogleAutoCompleteVendorState extends State<GoogleAutoCompleteVendor> {
           ),
         );
       },
-      onSelected: (GoogleMapsModel selection)  {
+      onSelected: (GoogleMapsModel selection) async {
+        final placeDetail = await googlePlace.details.get(selection.placeId);
 
-        print(selection.destination?.latitude);
-        print(selection.destination?.longitude);
-        // When the user selects a search result, update the text field with the selection
-        // _destinationController.text = selection;
-        // await Provider.of<GoogleMapsProvider>(context, listen: false).addMarker(
-        //   selection,
-        //   googlePlace,
-        // );
+        final lat = placeDetail!.result!.geometry!.location!.lat;
+        final lng = placeDetail.result!.geometry!.location!.lng;
 
-        // try {
-        // await Provider.of<GoogleMapsProvider>(
-        //   context,
-        //   listen: false,
-        // ).getRoutes();
-        // } catch (e) {
-        //   print(e);
-        // }
+        print(lat);
+        print(lng);
+
+        print(selection.description);
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -103,17 +98,17 @@ class _GoogleAutoCompleteVendorState extends State<GoogleAutoCompleteVendor> {
             onFieldSubmitted();
           },
           decoration: InputDecoration(
-            hintText: "Destination",
+            hintText: "Address",
             hintStyle: TextStyle(
               color: Colors.grey[400],
             ),
-            border: InputBorder.none,
-            filled: true,
+            // border: InputBorder.none,
+            // filled: true,
             fillColor: Colors.grey[900],
-            prefixIcon: Icon(
-              Icons.location_on_outlined,
-              color: Colors.grey[400],
-            ),
+            // prefixIcon: Icon(
+            //   Icons.location_on_outlined,
+            //   color: Colors.grey[400],
+            // ),
           ),
         );
       },
@@ -123,24 +118,6 @@ class _GoogleAutoCompleteVendorState extends State<GoogleAutoCompleteVendor> {
         if (textEditingValue.text.length < 3 || textEditingValue.text.isEmpty) {
           return const Iterable<GoogleMapsModel>.empty();
         }
-
-        // if (_debounce?.isActive ?? false) _debounce?.cancel();
-
-        // List<GoogleMapsModel> _options = [];
-
-        // _debounce = Timer(
-        //   const Duration(milliseconds: 1000),
-        //   await () async {
-        //     _options =
-        //         await Provider.of<GoogleMapsProvider>(context, listen: false)
-        //             .autoCompleteSearch(
-        //       textEditingValue.text,
-        //       googlePlace,
-        //       mounted,
-        //     );
-        //   },
-        // );
-        // return await options;
 
         if (_sendRequest) {
           return await Provider.of<GoogleMapsProvider>(context, listen: false)

@@ -20,14 +20,13 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
   final Map<String, dynamic> _initValue = {
     'name': '',
     'address': '',
-    'longitude':'',
-    'latitude':'',
-    'contactNumber':'',
-    'timing':'',
-
+    'longitude': '',
+    'latitude': '',
+    'contactNumber': '',
+    'timing': '',
   };
   final _nameFocusNode = FocusNode();
-  final _addressFocusNode = FocusNode();
+  // final _addressFocusNode = FocusNode();
   final _contactNumberFocusNode = FocusNode();
   final _timingFocusNode = FocusNode();
   final _buttonFocusNode = FocusNode();
@@ -36,7 +35,7 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
   @override
   void dispose() {
     _nameFocusNode.dispose();
-    _addressFocusNode.dispose();
+    // _addressFocusNode.dispose();
     _contactNumberFocusNode.dispose();
     _timingFocusNode.dispose();
     _buttonFocusNode.dispose();
@@ -76,11 +75,11 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
     // try {
     //   await Provider.of<DriverProvider>(context, listen: false).registerStore(
     //    _initValue["name"],
-          // _initValue["address"],
-          // _initValue["longitude"],
-          // _initValue["latitude"],
-          // _initValue["contactNumber"],
-          // _initValue["timing"],
+    // _initValue["address"],
+    // _initValue["longitude"],
+    // _initValue["latitude"],
+    // _initValue["contactNumber"],
+    // _initValue["timing"],
     //   );
 
     //   Provider.of<UserProvider>(context, listen: false)
@@ -111,7 +110,7 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
             keyboardType: TextInputType.text,
             focusNode: _nameFocusNode,
             onFieldSubmitted: (_) {
-              FocusScope.of(context).requestFocus(_addressFocusNode);
+              FocusScope.of(context).requestFocus(_contactNumberFocusNode);
             },
             validator: (value) {
               if (value!.isEmpty) {
@@ -126,30 +125,32 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
               _initValue['name'] = value;
             },
           ),
-          
-           TextFormField(
-            decoration: const InputDecoration(labelText: "Address"),
-            initialValue: _initValue['address'],
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.streetAddress,
-            focusNode: _addressFocusNode,
-            onFieldSubmitted: (_) {
-              FocusScope.of(context).requestFocus(_contactNumberFocusNode);
-            },
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter store address';
-              }
-              if (!RegExp('').hasMatch(value)) {
-                return 'Please enter a valid address';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              _initValue['address'] = value;
-            },
-          ),
-          
+
+          //  TextFormField(
+          //   decoration: const InputDecoration(labelText: "Address"),
+          //   initialValue: _initValue['address'],
+          //   textInputAction: TextInputAction.next,
+          //   keyboardType: TextInputType.streetAddress,
+          //   focusNode: _addressFocusNode,
+          //   onFieldSubmitted: (_) {
+          //     FocusScope.of(context).requestFocus(_contactNumberFocusNode);
+          //   },
+          //   validator: (value) {
+          //     if (value!.isEmpty) {
+          //       return 'Please enter store address';
+          //     }
+          //     if (!RegExp('').hasMatch(value)) {
+          //       return 'Please enter a valid address';
+          //     }
+          //     return null;
+          //   },
+          //   onSaved: (value) {
+          //     _initValue['address'] = value;
+          //   },
+          // ),
+          SizedBox(height: 8),
+          GoogleAutoCompleteVendor(),
+          // SizedBox(height: 5),
           TextFormField(
             decoration: const InputDecoration(labelText: "Contact Number"),
             initialValue: _initValue['contactNumber'],
@@ -172,7 +173,7 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
               _initValue['contactNumber'] = value;
             },
           ),
-          
+
           TextFormField(
             decoration: const InputDecoration(labelText: "Store Timing"),
             initialValue: _initValue['timing'],
@@ -192,8 +193,6 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
               _initValue['timing'] = value;
             },
           ),
-
-          GoogleAutoCompleteVendor(),
 
           const SizedBox(height: 5),
           Container(
