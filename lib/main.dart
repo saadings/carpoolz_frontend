@@ -18,6 +18,7 @@ import './screens/confirm_ride_screen.dart';
 import './screens/chat_room_screen.dart';
 
 import './widgets/google_maps.dart';
+import './widgets/ride_review.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -92,6 +93,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: const LoginScreen(),
+        // home: const RideReview(),
+        // home: const ConfirmRideScreen(),
         // home: const ChatRoomScreen(),
         // home: const HomeScreen(),
         // home: const RegisterDriverScreen(),
@@ -104,6 +107,7 @@ class MyApp extends StatelessWidget {
           RideRequestsScreen.routeName: (ctx) => const RideRequestsScreen(),
           ConfirmRideScreen.routeName: (ctx) => const ConfirmRideScreen(),
           ChatRoomScreen.routeName: (ctx) => const ChatRoomScreen(),
+          RideReview.routeName: (ctx) => const RideReview(),
         },
       ),
     );

@@ -20,20 +20,12 @@ class RideRequests extends StatefulWidget {
 }
 
 class _RideRequestsState extends State<RideRequests> {
-  // var rideRequests = [];
   var _currentType = Type.passenger;
   var _userName = "";
   bool _firstTime = false;
+
   @override
   void didChangeDependencies() {
-    // final requestingRide = Provider.of<RideRequestProvider>(
-    //   context,
-    //   listen: false,
-    // ).requestingRide;
-
-    // if (requestingRide) {
-    //   Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
-    // }
     if (!_firstTime) {
       _userName = Provider.of<RideRequestProvider>(
         context,
@@ -54,16 +46,6 @@ class _RideRequestsState extends State<RideRequests> {
 
   @override
   void dispose() {
-    // final _currentType =
-    //     Provider.of<UserProvider>(context, listen: false).currentType;
-
-    // if (_currentType == Type.driver) {
-    //   Provider.of<GoogleMapsProvider>(context, listen: false).deActiveDriver();
-    // } else if (_currentType == Type.passenger) {
-    //   Provider.of<GoogleMapsProvider>(context, listen: false)
-    //       .deActivePassenger();
-    // }
-
     _deActivateUser();
 
     super.dispose();
@@ -141,7 +123,8 @@ class _RideRequestsState extends State<RideRequests> {
                   rideRequests[index]['userName'].toString(),
                   userData,
                 );
-
+                Provider.of<RideRequestProvider>(context, listen: false)
+                    .disableButton(index);
                 // Navigator.of(context).pop();
                 final snackBar = SnackBar(
                   content: const Text(
@@ -240,7 +223,8 @@ class _RideRequestsState extends State<RideRequests> {
                   context,
                   listen: false,
                 ).setReceiverName(rideRequests[index]['userName'].toString());
-
+                Provider.of<RideRequestProvider>(context, listen: false)
+                    .disableButton(index);
                 Navigator.of(context).pop();
                 Provider.of<GoogleMapsProvider>(context, listen: false)
                     .setMarker(
@@ -290,82 +274,81 @@ class _RideRequestsState extends State<RideRequests> {
   @override
   Widget build(BuildContext context) {
     final rideRequests = Provider.of<RideRequestProvider>(context).rideRequests;
-    // final requestingRide =
-    //     Provider.of<RideRequestProvider>(context).requestingRide;
-    // final currentType = Provider.of<UserProvider>(context).currentType;
+    final itemDisabledList =
+        Provider.of<RideRequestProvider>(context).isEnabled;
+
     return Container(
       padding: EdgeInsets.only(top: 7.5),
-      child:
-          // requestingRide && currentType == Type.passenger
-          //     ? CircularProgressIndicator()
-          //     :
-          rideRequests.isEmpty
-              ? Center(
-                  child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.hourglass_bottom_rounded,
-                      size: 50,
+      child: rideRequests.isEmpty
+          ? Center(
+              child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.hourglass_bottom_rounded,
+                  size: 50,
+                  color: Colors.white70,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Waiting for Ride Requests",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ))
+          : ListView.builder(
+              itemBuilder: (ctx, index) => Column(
+                children: [
+                  ListTile(
+                    enabled: itemDisabledList.length > 0
+                        ? itemDisabledList[index]
+                        : true,
+                    onTap: () async {
+                      Provider.of<UserProvider>(context, listen: false)
+                                  .currentType ==
+                              Type.passenger
+                          ? await _showPassengerDialog(rideRequests, index)
+                          : await _showDriverDialog(rideRequests, index);
+                    },
+                    // enableFeedback: false,
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
                       color: Colors.white70,
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Waiting for Ride Requests",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ],
-                ))
-              : ListView.builder(
-                  itemBuilder: (ctx, index) => Column(
-                    children: [
-                      ListTile(
-                        onTap: () async {
-                          Provider.of<UserProvider>(context, listen: false)
-                                      .currentType ==
-                                  Type.passenger
-                              ? await _showPassengerDialog(rideRequests, index)
-                              : await _showDriverDialog(rideRequests, index);
-                        },
-                        // enableFeedback: true,
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white70,
-                        ),
-                        leading: CircleAvatar(
-                          child: Text(
-                            rideRequests[index]['userName'][0]
-                                .toString()
-                                .toUpperCase(),
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          backgroundColor: Theme.of(context).accentColor,
-                        ),
-                        title: Text(rideRequests[index]['userName'].toString()),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Longitude: ${rideRequests[index]['origin']['longitude']['\$numberDecimal']}",
-                            ),
-                            Text(
-                              "Latitude: ${rideRequests[index]['origin']['latitude']['\$numberDecimal']}",
-                            ),
-                          ],
+                    leading: CircleAvatar(
+                      child: Text(
+                        rideRequests[index]['userName'][0]
+                            .toString()
+                            .toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.white,
                         ),
                       ),
-                      Divider(),
-                    ],
+                      backgroundColor: Theme.of(context).accentColor,
+                    ),
+                    title: Text(rideRequests[index]['userName'].toString()),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Longitude: ${rideRequests[index]['origin']['longitude']['\$numberDecimal']}",
+                        ),
+                        Text(
+                          "Latitude: ${rideRequests[index]['origin']['latitude']['\$numberDecimal']}",
+                        ),
+                      ],
+                    ),
                   ),
-                  itemCount: rideRequests.length,
-                ),
+                  Divider(),
+                ],
+              ),
+              itemCount: rideRequests.length,
+            ),
     );
   }
 }

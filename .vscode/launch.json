@@ -25,6 +25,8 @@
       "name": "SM G950F",
       "request": "launch",
       "type": "dart",
+
+      // "deviceId": "ce031713a8eed40a0c"
       "deviceId": "192.168.100.133:5556"
     },
     {
@@ -32,12 +34,18 @@
       "request": "launch",
       "type": "dart",
       "deviceId": "192.168.100.136:5555"
+    },
+    {
+      "name": "SM A515F",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "192.168.100.65:5557"
     }
   ],
   "compounds": [
     {
       "name": "All Devices",
-      "configurations": ["SM G950F", "SM J600F"]
+      "configurations": ["SM G950F", "SM J600F", "SM A515F"]
     }
   ]
 }

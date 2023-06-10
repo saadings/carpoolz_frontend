@@ -143,7 +143,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             listen: false,
           ).startRideRequest();
 
-          Navigator.of(context).pushNamed(ConfirmRideScreen.routeName);
+          Navigator.of(context)
+              .pushReplacementNamed(ConfirmRideScreen.routeName);
         },
         child: _requestingRide && _userType == Type.passenger
             ? SmallLoading()

@@ -28,18 +28,26 @@ class _HomeScreenState extends State<HomeScreen> {
       elevation: 5,
       // backgroundColor: Color.fromRGBO(156, 39, 176, 0.4),
       actions: [
-        InkWell(
-          onTap: () {},
-          // borderRadius: BorderRadius.circular(1000),
-          child: CircleAvatar(
-            child: Text(
-              _userName[0].toUpperCase(),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: InkWell(
+            customBorder: CircleBorder(),
+            // borderRadius: BorderRadius.circular(1000),
+            // decoration: BoxDecoration(
+            // shape: BoxShape.circle,
+            // ),
+            onTap: () {},
+            // borderRadius: BorderRadius.circular(1000),
+            child: CircleAvatar(
+              child: Text(
+                _userName[0].toUpperCase(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
+              backgroundColor: Color.fromARGB(255, 96, 125, 139),
             ),
-            backgroundColor: Color.fromARGB(204, 96, 125, 139),
           ),
         ),
 

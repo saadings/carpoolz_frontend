@@ -1,9 +1,12 @@
 // import 'package:dio/dio.dart';
+import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/message.dart';
 import '../providers/user_provider.dart';
 import '../services/socket_services/socket_service.dart';
+import '../services/api_services/trip_service.dart';
 import '../screens/confirm_ride_screen.dart';
 
 class ChatRoomProvider with ChangeNotifier {
@@ -111,7 +114,7 @@ class ChatRoomProvider with ChangeNotifier {
       await showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text("Ride Request Conformation"),
+          title: Text("Ride Request Confirmation"),
           content: Text("Do you want to confirm ride?"),
           actions: [
             TextButton(
@@ -134,7 +137,19 @@ class ChatRoomProvider with ChangeNotifier {
                     },
                   );
                   _startRide = false;
-                  Navigator.of(context).pushNamed(ConfirmRideScreen.routeName);
+                  final _currentType =
+                      Provider.of<UserProvider>(context, listen: false)
+                          .currentType;
+
+                  if (_currentType == Type.passenger) {
+                    try {
+                      await TripService().startPassengerTrip(senderName);
+                    } catch (e) {
+                      print(e.toString());
+                    }
+                  }
+                  Navigator.of(context)
+                      .pushReplacementNamed(ConfirmRideScreen.routeName);
                   // notifyListeners();
                 } catch (e) {
                   print(e.toString());
@@ -153,11 +168,22 @@ class ChatRoomProvider with ChangeNotifier {
     });
   }
 
-  void receiveConfirmRide() {
+  void receiveConfirmRide(BuildContext context) {
     Socket socketService = Socket();
-    socketService.on("$senderName/confirm-ride", (data) {
+    socketService.on("$senderName/confirm-ride", (data) async {
       print(data);
       _startRide = false;
+      final _currentType =
+          Provider.of<UserProvider>(context, listen: false).currentType;
+
+      if (_currentType == Type.passenger) {
+        try {
+          await TripService().startPassengerTrip(senderName);
+        } catch (e) {
+          print(e.toString());
+        }
+      }
+
       notifyListeners();
     });
   }
