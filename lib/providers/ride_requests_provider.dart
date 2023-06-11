@@ -57,6 +57,11 @@ class RideRequestProvider with ChangeNotifier {
     // notifyListeners();
   }
 
+  void clearRideRequests() {
+    _rideRequests.clear();
+    notifyListeners();
+  }
+
   void getRideRequests(String event) {
     Socket socketService = Socket();
     socketService.on(event, (data) {

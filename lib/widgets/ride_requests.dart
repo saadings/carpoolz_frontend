@@ -31,7 +31,7 @@ class _RideRequestsState extends State<RideRequests> {
         context,
         listen: false,
       ).userName;
-
+      Provider.of<ChatRoomProvider>(context, listen: false).clearMessages();
       _currentType =
           Provider.of<UserProvider>(context, listen: false).currentType;
       Provider.of<RideRequestProvider>(

@@ -11,7 +11,7 @@ class RideRequestsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _currentType = Provider.of<UserProvider>(context).currentType;
+    // final _currentType = Provider.of<UserProvider>(context).currentType;
 
     return Scaffold(
       appBar: AppBar(
@@ -26,29 +26,29 @@ class RideRequestsScreen extends StatelessWidget {
         ],
       ),
       body: RideRequests(),
-      floatingActionButton: _currentType == Type.driver
-          ? FloatingActionButton.small(
-              tooltip: "Start Ride",
-              backgroundColor: Theme.of(context).accentColor,
-              onPressed: () {
-                // if (_requestingRide) return;
-                // Provider.of<ChatRoomProvider>(
-                //   context,
-                //   listen: false,
-                // ).startRideRequest();
+      // floatingActionButton: _currentType == Type.driver
+      //     ? FloatingActionButton.small(
+      //         tooltip: "Start Ride",
+      //         backgroundColor: Theme.of(context).accentColor,
+      //         onPressed: () {
+      //           // if (_requestingRide) return;
+      //           // Provider.of<ChatRoomProvider>(
+      //           //   context,
+      //           //   listen: false,
+      //           // ).startRideRequest();
 
-                // Navigator.of(context)
-                //     .pushReplacementNamed(ConfirmRideScreen.routeName);
-              },
-              child: Text(
-                'GO',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              // label: Text('GO', style: TextStyle(color: Colors.white)),
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+      //           // Navigator.of(context)
+      //           //     .pushReplacementNamed(ConfirmRideScreen.routeName);
+      //         },
+      //         child: Text(
+      //           'GO',
+      //           style:
+      //               TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      //         ),
+      //         // label: Text('GO', style: TextStyle(color: Colors.white)),
+      //       )
+      //     : null,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
     );
   }
 }

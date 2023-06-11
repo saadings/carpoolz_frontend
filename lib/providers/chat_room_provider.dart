@@ -1,5 +1,6 @@
 // import 'package:dio/dio.dart';
 import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
+import 'package:carpoolz_frontend/widgets/ride_review.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ import '../providers/user_provider.dart';
 import '../services/socket_services/socket_service.dart';
 import '../services/api_services/trip_service.dart';
 import '../screens/confirm_ride_screen.dart';
+import '../screens/start_ride_screen.dart';
 
 class ChatRoomProvider with ChangeNotifier {
   List<Message> _messages = [
@@ -34,6 +36,11 @@ class ChatRoomProvider with ChangeNotifier {
 
   void addMessage(String userName, String text, Type userType) {
     _messages.insert(0, Message(userName, text, userType));
+    notifyListeners();
+  }
+
+  void clearMessages() {
+    _messages.clear();
     notifyListeners();
   }
 
@@ -186,5 +193,53 @@ class ChatRoomProvider with ChangeNotifier {
 
       notifyListeners();
     });
+  }
+
+  void receiveStartRide(BuildContext context) {
+    Socket socketService = Socket();
+    socketService.on("start-ride", (data) async {
+      print(data);
+      Navigator.of(context).pushReplacementNamed(StartRideScreen.routeName);
+
+      notifyListeners();
+    });
+  }
+
+  void sendStartRide() {
+    Socket socketService = Socket();
+    socketService.emit(
+      "start-ride",
+      {
+        'userName': senderName,
+        'user': senderType == Type.passenger ? "passenger" : "driver",
+      },
+    );
+  }
+
+  void receiveEndRide(BuildContext context) {
+    Socket socketService = Socket();
+    socketService.on("end-ride", (data) async {
+      print(data);
+      // Navigator.of(context).pushReplacementNamed(StartRideScreen.routeName);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return RideReview();
+        },
+      );
+
+      notifyListeners();
+    });
+  }
+
+  void sendEndRide() {
+    Socket socketService = Socket();
+    socketService.emit(
+      "end-ride",
+      {
+        'userName': senderName,
+        'user': senderType == Type.passenger ? "passenger" : "driver",
+      },
+    );
   }
 }

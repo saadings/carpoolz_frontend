@@ -1,5 +1,7 @@
 import 'package:carpoolz_frontend/providers/driver_provider.dart';
+import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
 import 'package:carpoolz_frontend/providers/user_provider.dart';
+import 'package:carpoolz_frontend/screens/home_screen.dart';
 import 'package:carpoolz_frontend/screens/ride_requests_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +25,14 @@ class _ConfirmRideScreenState extends State<ConfirmRideScreen> {
     if (!_firstTime) {
       Provider.of<ChatRoomProvider>(context, listen: false)
           .receiveConfirmRide(context);
+
+      final _currentType = Provider.of<UserProvider>(context).currentType;
+
+      if (_currentType == Type.passenger) {
+        Provider.of<ChatRoomProvider>(context, listen: false)
+            .receiveStartRide(context);
+      }
+
       _firstTime = true;
     }
     super.didChangeDependencies();
@@ -108,6 +118,7 @@ class StartRideButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         Provider.of<DriverProvider>(context, listen: false).startDriverRide();
+        Provider.of<ChatRoomProvider>(context, listen: false).sendStartRide();
         // Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
       },
       child: Text(
@@ -131,9 +142,13 @@ class EndRideButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        // Provider.of<DriverProvider>(context, listen: false)
-        //     .startDriverRide();
-        // Navigator.of(context).pushNamed(ChatRoomScreen.routeName);
+        Provider.of<ChatRoomProvider>(context, listen: false).sendEndRide();
+        Provider.of<RideRequestProvider>(context, listen: false)
+            .clearRideRequests();
+        Navigator.of(context)
+            .popUntil(ModalRoute.withName(HomeScreen.routeName));
+        // Navigator.pushNamedAndRemoveUntil(
+        //     context, RideRequestsScreen.routeName, (r) => false);
       },
       style: ButtonStyle(
         backgroundColor: MaterialStatePropertyAll(

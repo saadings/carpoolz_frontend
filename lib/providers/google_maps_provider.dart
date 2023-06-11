@@ -170,6 +170,10 @@ class GoogleMapsProvider with ChangeNotifier {
         Marker(
           markerId: MarkerId(_markers.length.toString()),
           position: position.destination!,
+          // infoWindow: InfoWindow(
+          //   title: position.name,
+          //   snippet: position.placeId,
+          // ),
           icon: BitmapDescriptor.defaultMarkerWithHue(
             BitmapDescriptor.hueViolet,
           ),

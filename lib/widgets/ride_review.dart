@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class RideReview extends StatefulWidget {
@@ -47,6 +48,8 @@ class _RideReviewState extends State<RideReview> {
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(
+                    context, HomeScreen.routeName, (r) => false);
               },
               child: Text(
                 'Submit',
