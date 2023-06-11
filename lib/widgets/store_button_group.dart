@@ -34,19 +34,19 @@ class StoreButtonGroupState extends State<StoreButtonGroup> {
     final List<dynamic> storeList =
         Provider.of<StoreListProvider>(context).storeList;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Vendor Stores'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed(RegisterStoreScreen.routeName);
-            },
-          ),
-        ],
-      ),
-      body: GridView.count(
+    return Container(
+      // appBar: AppBar(
+      //   title: Text('Vendor Stores'),
+      //   actions: [
+      //     IconButton(
+      //       icon: Icon(Icons.add),
+      //       onPressed: () {
+      //         Navigator.of(context).pushNamed(RegisterStoreScreen.routeName);
+      //       },
+      //     ),
+      //   ],
+      // ),
+      child: GridView.count(
         crossAxisCount: 2,
         padding: EdgeInsets.all(16.0),
         children: [
