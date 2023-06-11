@@ -54,4 +54,25 @@ class StoreListProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> getPassengerStores() async {
+    try {
+      final response = await StoreService().getPassengerStores(userName);
+      // print(response.data['data']);
+      storeList = (response.data['data'] as List<dynamic>).map((storeData) {
+        return Stores(
+          storeID: storeData['_id'],
+          storeName: storeData['name'],
+          address: storeData['address'],
+          latitude: storeData['latitude']['\$numberDecimal'],
+          longitude: storeData['longitude']['\$numberDecimal'],
+          contactNumber: storeData['contactNumber'],
+          timing: storeData['timing'],
+        );
+      }).toList();
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

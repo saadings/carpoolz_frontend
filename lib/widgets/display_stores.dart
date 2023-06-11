@@ -1,41 +1,38 @@
+import 'package:carpoolz_frontend/providers/store_list_provider.dart';
 import 'package:carpoolz_frontend/screens/display_deals_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Store {
-  final String name;
-  final String address;
-  final String contactNumber;
-  final String timing;
-
-  Store({
-    required this.name,
-    required this.address,
-    required this.contactNumber,
-    required this.timing,
-  });
-}
-
-class DisplayStores extends StatelessWidget {
+class DisplayStores extends StatefulWidget {
   DisplayStores({Key? key}) : super(key: key);
 
-  final List<Store> stores = [
-    Store(
-      name: 'Store 1',
-      address: '123 Main Street',
-      contactNumber: '123-456-7890',
-      timing: '9:00 AM - 6:00 PM',
-    ),
-    Store(
-      name: 'Store 2',
-      address: '456 Elm Street',
-      contactNumber: '987-654-3210',
-      timing: '8:30 AM - 7:00 PM',
-    ),
-    // Add more stores as needed
-  ];
+  @override
+  State<DisplayStores> createState() => _DisplayStoresState();
+}
+
+class _DisplayStoresState extends State<DisplayStores> {
+  bool _firstTime = false;
+
+  void getPassengerStores() async {
+    await Provider.of<StoreListProvider>(context, listen: false)
+        .getPassengerStores();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_firstTime) {
+      getPassengerStores();
+      _firstTime = true;
+    }
+    // getPassengerStores();
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Stores> stores =
+        Provider.of<StoreListProvider>(context).storeList;
+    print(stores);
     return Scaffold(
       appBar: AppBar(
         title: Text('Store List'),
@@ -47,7 +44,7 @@ class DisplayStores extends StatelessWidget {
           color: Colors.grey,
         ),
         itemBuilder: (BuildContext context, int index) {
-          Store store = stores[index];
+          Stores store = stores[index];
           return GestureDetector(
             onTap: () {
               Navigator.of(context).pushNamed(DisplayDealsScreen.routeName);
@@ -58,7 +55,7 @@ class DisplayStores extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    store.name,
+                    store.storeName,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

@@ -56,4 +56,16 @@ class StoreService extends BaseService {
       rethrow;
     }
   }
+
+  Future<Response> getPassengerStores(String userName) async {
+    try {
+      return await dio.post('/activate-store/passenger', data: {
+        "userName": userName,
+      });
+    } on DioError catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

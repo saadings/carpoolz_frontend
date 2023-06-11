@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../widgets/auth_container.dart';
 import '../widgets/store_button_group.dart';
 
 class StoreScreen extends StatelessWidget {
