@@ -1,8 +1,10 @@
+import 'package:carpoolz_frontend/screens/store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
 import '../screens/register_driver_screen.dart';
+import '../screens/register_vendor_screen.dart';
 
 class UserButtonGroup extends StatefulWidget {
   const UserButtonGroup({super.key});
@@ -42,7 +44,23 @@ class UserButtonGroupState extends State<UserButtonGroup> {
       // Navigator.of(context).pop();
       Navigator.of(context)
           .pushReplacementNamed(RegisterDriverScreen.routeName);
-    } else
+    } 
+    else if(!Provider.of<UserProvider>(context, listen: false)
+            .types!
+            .contains(Type.vendor) &&
+        _userTypeState == 'Vendor') {
+      // Navigator.of(context).pop();
+      Navigator.of(context)
+          .pushReplacementNamed(RegisterVendorScreen.routeName);
+    } 
+    else if(Provider.of<UserProvider>(context, listen: false)
+            .types!
+            .contains(Type.vendor) &&
+        _userTypeState == 'Vendor'){
+          Navigator.of(context)
+          .pushNamed(StoreScreen.routeName);
+        }
+    else
       Navigator.of(context).pop();
   }
 

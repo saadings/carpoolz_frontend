@@ -1,3 +1,5 @@
+import 'package:carpoolz_frontend/providers/store_provider.dart';
+import 'package:carpoolz_frontend/providers/vendor_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +18,14 @@ import './screens/home_screen.dart';
 import './screens/ride_requests_screen.dart';
 import './screens/confirm_ride_screen.dart';
 import './screens/chat_room_screen.dart';
+
+import './screens/register_vendor_screen.dart';
+import './screens/register_store_screen.dart';
+import './screens/store_screen.dart';
+import './screens/deals_screen.dart';
+import './screens/add_deal_screen.dart';
 import './screens/start_ride_screen.dart';
+
 
 import './widgets/google_maps.dart';
 import './widgets/ride_review.dart';
@@ -40,6 +49,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<UserProvider, DriverProvider>(
           create: (_) => DriverProvider(userName: ""),
           update: (ctx, user, previousState) => DriverProvider(
+            userName: user.userName,
+          ),
+        ),
+        ChangeNotifierProxyProvider<UserProvider, VendorProvider>(
+          create: (_) => VendorProvider(userName: ""),
+          update: (ctx, user, previousState) => VendorProvider(
+            userName: user.userName,
+          ),
+        ),
+        ChangeNotifierProxyProvider<UserProvider, StoreProvider>(
+          create: (_) => StoreProvider(userName: ""),
+          update: (ctx, user, previousState) => StoreProvider(
             userName: user.userName,
           ),
         ),
@@ -102,12 +123,17 @@ class MyApp extends StatelessWidget {
         routes: {
           RegisterScreen.routeName: (ctx) => const RegisterScreen(),
           RegisterDriverScreen.routeName: (ctx) => const RegisterDriverScreen(),
+          RegisterVendorScreen.routeName: (ctx) => const RegisterVendorScreen(),
+          RegisterStoreScreen.routeName: (ctx) => const RegisterStoreScreen(), 
           OtpScreen.routeName: (ctx) => const OtpScreen(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),
           GoogleMaps.routeName: (ctx) => const GoogleMaps(),
           RideRequestsScreen.routeName: (ctx) => const RideRequestsScreen(),
           ConfirmRideScreen.routeName: (ctx) => const ConfirmRideScreen(),
           ChatRoomScreen.routeName: (ctx) => const ChatRoomScreen(),
+          StoreScreen.routeName: (ctx) => const StoreScreen(),
+          DealsListScreen.routeName: (ctx) => const DealsListScreen(),
+          AddDealScreen.routeName: (ctx) => const AddDealScreen(),
           RideReview.routeName: (ctx) => const RideReview(),
           StartRideScreen.routeName: (ctx) => const StartRideScreen(),
         },
