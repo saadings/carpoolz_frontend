@@ -35,7 +35,7 @@ class StoreListProvider with ChangeNotifier {
     try {
       final response =
           await StoreService().getStoreDetails(userName.toLowerCase());
-      print(response.data);
+      // print(response.data);
 
       storeList = (response.data['data'] as List<dynamic>).map((storeData) {
         return Stores(

@@ -5,7 +5,7 @@ import './base_service.dart';
 
 class DealService extends BaseService {
   Future<Response> addStoreDeals(
-      String storeID, String title, String description, double price) async {
+      String storeID, String title, String description, String price) async {
     try {
       return await dio.post('/stores/deals/add', data: {
         "storeID": storeID,

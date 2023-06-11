@@ -56,7 +56,8 @@ class StoreButtonGroupState extends State<StoreButtonGroup> {
               margin: EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: () {
-                  Provider.of<DealProvider>(context, listen: false).setStoreID(store.storeID);
+                  Provider.of<DealProvider>(context, listen: false)
+                      .setStoreID(store.storeID);
 
                   Navigator.of(context).pushNamed(DealsListScreen.routeName);
                   // Add your button logic here

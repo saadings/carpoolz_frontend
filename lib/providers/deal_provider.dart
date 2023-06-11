@@ -11,22 +11,20 @@ class DealProvider with ChangeNotifier {
   String description = "";
   String price = "";
 
-  DealProvider({
-    required this.storeID,
-    //  this.storeName,
-    //   this.address,
-    //   this.latLang,
-    //  this.contactNumber,
-    //  this.timing,
-  });
+  // DealProvider({
+  //   // required this.storeID,
+  //   //  this.storeName,
+  //   //   this.address,
+  //   //   this.latLang,
+  //   //  this.contactNumber,
+  //   //  this.timing,
+  // });
 
-
-  void setStoreID(var storeID){
+  void setStoreID(var storeID) {
     this.storeID = storeID;
   }
-  
-  Future<void> addDeal(
-      String title, String description, double price) async {
+
+  Future<void> addDeal(String title, String description, String price) async {
     try {
       await DealService().addStoreDeals(storeID, title, description, price);
 
@@ -35,6 +33,4 @@ class DealProvider with ChangeNotifier {
       rethrow;
     }
   }
-
-  
 }

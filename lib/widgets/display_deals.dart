@@ -13,17 +13,17 @@ class Deal {
 }
 
 class DisplayDeals extends StatelessWidget {
-DisplayDeals({Key? key}) : super(key: key);
+  DisplayDeals({Key? key}) : super(key: key);
   final List<Deal> deals = [
     Deal(
       title: 'Deal 1',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      price: 19.99,
+      description: 'Burger.',
+      price: 200,
     ),
     Deal(
       title: 'Deal 2',
-      description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      price: 29.99,
+      description: 'Pizza',
+      price: 700,
     ),
     // Add more deals as needed
   ];
@@ -59,7 +59,7 @@ DisplayDeals({Key? key}) : super(key: key);
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Price: \$${deal.price.toStringAsFixed(2)}',
+                    'Price: ${deal.price.toStringAsFixed(2)}',
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 16),

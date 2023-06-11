@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/providers/deal_provider.dart';
 import 'package:carpoolz_frontend/providers/store_list_provider.dart';
 import 'package:carpoolz_frontend/providers/store_provider.dart';
 import 'package:carpoolz_frontend/providers/vendor_provider.dart';
@@ -28,7 +29,6 @@ import './screens/add_deal_screen.dart';
 import './screens/start_ride_screen.dart';
 import './screens/display_stores_screen.dart';
 import './screens/display_deals_screen.dart';
-
 
 import './widgets/google_maps.dart';
 import './widgets/ride_review.dart';
@@ -67,11 +67,14 @@ class MyApp extends StatelessWidget {
             userName: user.userName,
           ),
         ),
-         ChangeNotifierProxyProvider<UserProvider, StoreListProvider>(
+        ChangeNotifierProxyProvider<UserProvider, StoreListProvider>(
           create: (_) => StoreListProvider(userName: ""),
           update: (ctx, user, previousState) => StoreListProvider(
             userName: user.userName,
           ),
+        ),
+        ChangeNotifierProvider<DealProvider>(
+          create: (_) => DealProvider(),
         ),
         ChangeNotifierProxyProvider<UserProvider, GoogleMapsProvider>(
           create: (_) => GoogleMapsProvider(userName: ""),
@@ -133,7 +136,7 @@ class MyApp extends StatelessWidget {
           RegisterScreen.routeName: (ctx) => const RegisterScreen(),
           RegisterDriverScreen.routeName: (ctx) => const RegisterDriverScreen(),
           RegisterVendorScreen.routeName: (ctx) => const RegisterVendorScreen(),
-          RegisterStoreScreen.routeName: (ctx) => const RegisterStoreScreen(), 
+          RegisterStoreScreen.routeName: (ctx) => const RegisterStoreScreen(),
           OtpScreen.routeName: (ctx) => const OtpScreen(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),
           GoogleMaps.routeName: (ctx) => const GoogleMaps(),
@@ -145,9 +148,8 @@ class MyApp extends StatelessWidget {
           AddDealScreen.routeName: (ctx) => const AddDealScreen(),
           RideReview.routeName: (ctx) => const RideReview(),
           StartRideScreen.routeName: (ctx) => const StartRideScreen(),
-          DisplayStoresScreen.routeName:(ctx) => const DisplayStoresScreen(),
+          DisplayStoresScreen.routeName: (ctx) => const DisplayStoresScreen(),
           DisplayDealsScreen.routeName: (ctx) => const DisplayDealsScreen(),
-
         },
       ),
     );
