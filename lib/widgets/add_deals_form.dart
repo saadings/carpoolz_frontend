@@ -113,6 +113,27 @@ class AddDealsFormState extends State<AddDealsForm> {
           ),
           
           TextFormField(
+            decoration: const InputDecoration(labelText: "Description"),
+            initialValue: _initValue['description'],
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.text,
+            focusNode: _descriptionFocusNode,
+            onFieldSubmitted: (_) {
+              FocusScope.of(context).requestFocus(_priceFocusNode);
+            },
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter description';
+              }
+
+              return null;
+            },
+            onSaved: (value) {
+              _initValue['description'] = value;
+            },
+          ),
+
+          TextFormField(
             decoration: const InputDecoration(labelText: "Price"),
             initialValue: _initValue['price'],
             textInputAction: TextInputAction.next,

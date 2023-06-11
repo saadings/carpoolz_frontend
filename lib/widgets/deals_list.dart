@@ -1,14 +1,9 @@
+import 'package:carpoolz_frontend/providers/deal_provider.dart';
+import 'package:carpoolz_frontend/providers/deals_list_provider.dart';
 import 'package:carpoolz_frontend/screens/add_deal_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-
-class Deal {
-  final String title;
-  final String description;
-  final double price;
-
-  Deal({required this.title, required this.description, required this.price});
-}
 
 class DealsList extends StatefulWidget {
   const DealsList({super.key});
@@ -18,26 +13,33 @@ class DealsList extends StatefulWidget {
 }
 
 class DealsListState extends State<DealsList> {
-    List<Deal> deals = [
-    Deal(
-      title: 'Deal 1',
-      description: 'This is the description for Deal 1',
-      price: 19.99,
-    ),
-    Deal(
-      title: 'Deal 2',
-      description: 'This is the description for Deal 2',
-      price: 29.99,
-    ),
-    Deal(
-      title: 'Deal 3',
-      description: 'This is the description for Deal 3',
-      price: 39.99,
-    ),
-  ];
+     bool _firstTime = false;
+
+
+  void getStoreData() async {
+    final storeID = Provider.of<DealProvider>(context, listen: false).storeID;
+    await Provider.of<DealListProvider>(context, listen: false)
+        .getDeals(storeID);
+  }
+
+
+
+  @override
+  void didChangeDependencies() {
+    if (!_firstTime) {
+      getStoreData();
+      _firstTime = true;
+    }
+
+    super.didChangeDependencies();
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
+    List<Deals> deals = Provider.of<DealListProvider>(context).DealList;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Deals'),

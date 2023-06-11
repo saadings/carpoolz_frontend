@@ -1,4 +1,5 @@
 import 'package:carpoolz_frontend/providers/deal_provider.dart';
+import 'package:carpoolz_frontend/providers/deals_list_provider.dart';
 import 'package:carpoolz_frontend/providers/store_list_provider.dart';
 import 'package:carpoolz_frontend/providers/store_provider.dart';
 import 'package:carpoolz_frontend/providers/vendor_provider.dart';
@@ -75,6 +76,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<DealProvider>(
           create: (_) => DealProvider(),
+        ),
+        ChangeNotifierProvider<DealListProvider>(
+          create: (_) => DealListProvider(),
         ),
         ChangeNotifierProxyProvider<UserProvider, GoogleMapsProvider>(
           create: (_) => GoogleMapsProvider(userName: ""),

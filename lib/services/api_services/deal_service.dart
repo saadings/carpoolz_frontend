@@ -19,4 +19,19 @@ class DealService extends BaseService {
       rethrow;
     }
   }
+
+
+Future<Response> getStoreDetails(String storeID) async {
+    try {
+      return await dio.post('stores/deals/all', data: {
+        "storeID": storeID,
+      });
+    } on DioError catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
+
+  
