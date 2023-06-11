@@ -78,7 +78,7 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
         _initValue["timing"],
       );
 
-      await _showDialog("Store Registered Successfully");
+     // await _showDialog("Store Registered Successfully");
 
       Navigator.of(context).pushReplacementNamed(StoreScreen.routeName);
     } on DioError catch (e) {

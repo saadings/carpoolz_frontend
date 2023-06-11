@@ -125,7 +125,7 @@ class MyApp extends StatelessWidget {
           RideRequestsScreen.routeName: (ctx) => const RideRequestsScreen(),
           ConfirmRideScreen.routeName: (ctx) => const ConfirmRideScreen(),
           ChatRoomScreen.routeName: (ctx) => const ChatRoomScreen(),
-          StoreScreen.routeName: (ctx) => const AddDealScreen(),
+          StoreScreen.routeName: (ctx) => const StoreScreen(),
           DealsListScreen.routeName: (ctx) => const DealsListScreen(),
           AddDealScreen.routeName: (ctx) => const AddDealScreen(),
 

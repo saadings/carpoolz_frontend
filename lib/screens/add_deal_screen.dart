@@ -11,6 +11,6 @@ class AddDealScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const AuthContainer(
-        title: "Add Deal", child: AddDealScreen());
+        title: "Add Deal", child: AddDealsForm());
   }
 }
