@@ -1,9 +1,11 @@
 import 'package:carpoolz_frontend/screens/deals_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/home_screen.dart';
 import '../widgets/small_loading.dart';
+import '../providers/deal_provider.dart';
 
 class AddDealsForm extends StatefulWidget {
   const AddDealsForm({Key? key}) : super(key: key);
@@ -64,26 +66,23 @@ class AddDealsFormState extends State<AddDealsForm> {
 
     _form.currentState!.save();
 
-  //   try {
-  //     await Provider.of<DriverProvider>(context, listen: false).registerDriver(
-  //       _initValue["cnic"],
-  //       _initValue["licenseNo"],
-  //     );
+    try {
+      await Provider.of<DealProvider>(context, listen: false).addDeal(
+        _initValue["title"],
+        _initValue["description"],
+        _initValue["price"],
+      );
+      await _showDialog("Deal Added Successfully");
 
-  //     Provider.of<UserProvider>(context, listen: false)
-  //         .appendTypeList(Type.driver);
+      Navigator.of(context).pushReplacementNamed(DealsListScreen.routeName);
+    } on DioError catch (e) {
+      await _showDialog(e.response!.data['message']);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
 
-  //     await _showDialog("Driver Registered Successfully");
-
-  //     Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
-  //   } on DioError catch (e) {
-  //     await _showDialog(e.response!.data['message']);
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   }
-  Navigator.of(context).pushReplacementNamed(DealsListScreen.routeName);
    }
 
   Widget build(BuildContext context) {

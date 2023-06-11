@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/providers/deal_provider.dart';
 import 'package:carpoolz_frontend/screens/register_store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +56,8 @@ class StoreButtonGroupState extends State<StoreButtonGroup> {
               margin: EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: () {
+                  Provider.of<DealProvider>(context, listen: false).setStoreID(store.storeID);
+
                   Navigator.of(context).pushNamed(DealsListScreen.routeName);
                   // Add your button logic here
                 },
