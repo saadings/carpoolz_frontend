@@ -45,8 +45,8 @@
   "compounds": [
     {
       "name": "All Devices",
-      // "configurations": ["SM G950F", "SM J600F", "SM A515F"]
-      "configurations": ["SM G950F", "SM A515F"]
+      "configurations": ["SM G950F", "SM J600F", "SM A515F"]
+      // "configurations": ["SM G950F", "SM A515F"]
       // "configurations": ["SM G950F", "SM J600F"]
     }
   ]

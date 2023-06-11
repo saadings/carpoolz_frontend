@@ -15,7 +15,7 @@ class Deals {
   Deals({
     required this.storeID,
     required this.title,
-    required this. description,
+    required this.description,
     required this.price,
   });
 }
@@ -23,20 +23,17 @@ class Deals {
 class DealListProvider with ChangeNotifier {
   List<Deals> DealList = [];
 
-
   Future<void> getDeals(var storeID) async {
     try {
-      final response =
-          await DealService().getStoreDetails(storeID);
-      // print(response.data);
+      final response = await DealService().getStoreDetails(storeID);
+      print(response.data['data']);
 
       DealList = (response.data['data'] as List<dynamic>).map((dealData) {
         return Deals(
           storeID: dealData['_id'],
           title: dealData['title'],
           description: dealData['description'],
-          price: dealData['price'],
-
+          price: dealData['price']['\$numberDecimal'],
         );
       }).toList();
 
@@ -45,5 +42,4 @@ class DealListProvider with ChangeNotifier {
       rethrow;
     }
   }
-
 }

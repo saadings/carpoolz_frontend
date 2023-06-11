@@ -1,4 +1,7 @@
+import 'package:carpoolz_frontend/providers/deal_provider.dart';
+import 'package:carpoolz_frontend/providers/deals_list_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Deal {
   final String title;
@@ -12,24 +15,36 @@ class Deal {
   });
 }
 
-class DisplayDeals extends StatelessWidget {
+class DisplayDeals extends StatefulWidget {
   DisplayDeals({Key? key}) : super(key: key);
-  final List<Deal> deals = [
-    Deal(
-      title: 'Deal 1',
-      description: 'Burger.',
-      price: 200,
-    ),
-    Deal(
-      title: 'Deal 2',
-      description: 'Pizza',
-      price: 700,
-    ),
-    // Add more deals as needed
-  ];
+
+  @override
+  State<DisplayDeals> createState() => _DisplayDealsState();
+}
+
+class _DisplayDealsState extends State<DisplayDeals> {
+  // final List<Deal> deals = [
+  bool _firstTime = false;
+
+  Future<void> getDeals() async {
+    final _storeId = Provider.of<DealProvider>(context, listen: false).storeID;
+    await Provider.of<DealListProvider>(context, listen: false)
+        .getDeals(_storeId);
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_firstTime) {
+      getDeals();
+      _firstTime = true;
+    }
+
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Deals> deals = Provider.of<DealListProvider>(context).DealList;
     return Scaffold(
       appBar: AppBar(
         title: Text('Deal List'),
@@ -37,7 +52,7 @@ class DisplayDeals extends StatelessWidget {
       body: ListView.builder(
         itemCount: deals.length,
         itemBuilder: (BuildContext context, int index) {
-          Deal deal = deals[index];
+          Deals deal = deals[index];
           return Card(
             margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Padding(
@@ -59,7 +74,7 @@ class DisplayDeals extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Price: ${deal.price.toStringAsFixed(2)}',
+                    'Price: ${deal.price}',
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 16),

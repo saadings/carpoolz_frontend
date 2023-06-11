@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/providers/deal_provider.dart';
 import 'package:carpoolz_frontend/providers/store_list_provider.dart';
 import 'package:carpoolz_frontend/screens/display_deals_screen.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,8 @@ class _DisplayStoresState extends State<DisplayStores> {
           Stores store = stores[index];
           return GestureDetector(
             onTap: () {
+              Provider.of<DealProvider>(context, listen: false)
+                  .setStoreID(store.storeID);
               Navigator.of(context).pushNamed(DisplayDealsScreen.routeName);
             },
             child: Container(

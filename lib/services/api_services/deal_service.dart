@@ -20,10 +20,9 @@ class DealService extends BaseService {
     }
   }
 
-
-Future<Response> getStoreDetails(String storeID) async {
+  Future<Response> getStoreDetails(String storeID) async {
     try {
-      return await dio.post('stores/deals/all', data: {
+      return await dio.post('/stores/deals', data: {
         "storeID": storeID,
       });
     } on DioError catch (_) {
@@ -33,5 +32,3 @@ Future<Response> getStoreDetails(String storeID) async {
     }
   }
 }
-
-  
