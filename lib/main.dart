@@ -25,6 +25,8 @@ import './screens/store_screen.dart';
 import './screens/deals_screen.dart';
 import './screens/add_deal_screen.dart';
 import './screens/start_ride_screen.dart';
+import './screens/display_stores_screen.dart';
+import './screens/display_deals_screen.dart';
 
 
 import './widgets/google_maps.dart';
@@ -136,6 +138,9 @@ class MyApp extends StatelessWidget {
           AddDealScreen.routeName: (ctx) => const AddDealScreen(),
           RideReview.routeName: (ctx) => const RideReview(),
           StartRideScreen.routeName: (ctx) => const StartRideScreen(),
+          DisplayStoresScreen.routeName:(ctx) => const DisplayStoresScreen(),
+          DisplayDealsScreen.routeName: (ctx) => const DisplayDealsScreen(),
+
         },
       ),
     );
