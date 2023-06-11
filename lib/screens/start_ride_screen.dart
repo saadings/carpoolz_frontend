@@ -1,4 +1,5 @@
 import 'package:carpoolz_frontend/providers/chat_room_provider.dart';
+import 'package:carpoolz_frontend/screens/display_stores_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +38,8 @@ class _StartRideScreenState extends State<StartRideScreen> {
         ),
         onPressed: () {
           // Navigator.of(context).pop();
+          Navigator.of(context)
+              .pushReplacementNamed(DisplayStoresScreen.routeName);
         },
         child: Icon(
           Icons.restaurant,

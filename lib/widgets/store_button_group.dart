@@ -12,29 +12,27 @@ class StoreButtonGroup extends StatefulWidget {
 }
 
 class StoreButtonGroupState extends State<StoreButtonGroup> {
-  
+  bool _firstTime = false;
+
+  void getStoreData() async {
+    await Provider.of<StoreListProvider>(context, listen: false)
+        .getStoreDetails();
+  }
+
   @override
-  void didChangeDependencies(){
-    Provider.of>(context,listen: false );
+  void didChangeDependencies() {
+    if (!_firstTime) {
+      getStoreData();
+      _firstTime = true;
+    }
+
     super.didChangeDependencies();
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
-    final List<Stores> storeList = Provider.of<StoreListProvider>(context).storeList;
+    final List<dynamic> storeList =
+        Provider.of<StoreListProvider>(context).storeList;
 
     return Scaffold(
       appBar: AppBar(
