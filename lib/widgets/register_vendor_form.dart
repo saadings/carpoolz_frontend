@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
-import '../providers/driver_provider.dart';
+import '../providers/vendor_provider.dart';
 import '../screens/home_screen.dart';
 import '../widgets/small_loading.dart';
 
@@ -61,26 +61,26 @@ class RegisterVendorFormState extends State<RegisterVendorForm> {
 
     _form.currentState!.save();
 
-    Navigator.of(context).pushReplacementNamed(RegisterStoreScreen.routeName);
+    
 
-    // try {
-    //   await Provider.of<DriverProvider>(context, listen: false).registerVendor(
-    //     _initValue["cnic"],
-    //   );
+    try {
+      await Provider.of<VendorProvider>(context, listen: false).registerVendor(
+        _initValue["cnic"],
+      );
 
-    //   Provider.of<UserProvider>(context, listen: false)
-    //       .appendTypeList(Type.driver);
+      Provider.of<UserProvider>(context, listen: false)
+          .appendTypeList(Type.vendor);
 
-    //   await _showDialog("Vendor Registered Successfully");
+      await _showDialog("Vendor Registered Successfully");
 
-    //   Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
-    // } on DioError catch (e) {
-    //   await _showDialog(e.response!.data['message']);
-    // } finally {
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
-    // }
+      Navigator.of(context).pushReplacementNamed(RegisterStoreScreen.routeName);
+    } on DioError catch (e) {
+      await _showDialog(e.response!.data['message']);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Widget build(BuildContext context) {

@@ -8,5 +8,6 @@
     "Locationbias",
     "Polyline",
     "polylines"
-  ]
+  ],
+  "cmake.sourceDirectory": "/Users/macbookpro/Desktop/Carpoolz App/carpoolz_frontend/linux"
 }

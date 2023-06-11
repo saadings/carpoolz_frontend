@@ -1,5 +1,8 @@
+import 'package:carpoolz_frontend/providers/store_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:provider/provider.dart';
 
@@ -83,11 +86,17 @@ class _GoogleAutoCompleteVendorState extends State<GoogleAutoCompleteVendor> {
         final lat = placeDetail!.result!.geometry!.location!.lat;
         final lng = placeDetail.result!.geometry!.location!.lng;
 
-        print(lat);
-        print(lng);
+        try {
+               Provider.of<StoreProvider>(context, listen: false).setLatLang(
+                LatLng(lat!, lng!), selection.description
+              );
 
-        print(selection.description);
-      },
+            } on DioError catch (e) {
+              
+            }
+          },
+ 
+              
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         // Return the text field with the controller and focus node

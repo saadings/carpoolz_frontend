@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/screens/store_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,6 +53,13 @@ class UserButtonGroupState extends State<UserButtonGroup> {
       Navigator.of(context)
           .pushReplacementNamed(RegisterVendorScreen.routeName);
     } 
+    else if(Provider.of<UserProvider>(context, listen: false)
+            .types!
+            .contains(Type.vendor) &&
+        _userTypeState == 'Vendor'){
+          Navigator.of(context)
+          .pushNamed(StoreScreen.routeName);
+        }
     else
       Navigator.of(context).pop();
   }

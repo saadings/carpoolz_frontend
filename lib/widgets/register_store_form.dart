@@ -1,3 +1,5 @@
+import 'package:carpoolz_frontend/providers/store_provider.dart';
+import 'package:carpoolz_frontend/screens/store_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +21,6 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
   var _isLoading = false;
   final Map<String, dynamic> _initValue = {
     'name': '',
-    'address': '',
-    'longitude': '',
-    'latitude': '',
     'contactNumber': '',
     'timing': '',
   };
@@ -30,7 +29,7 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
   final _contactNumberFocusNode = FocusNode();
   final _timingFocusNode = FocusNode();
   final _buttonFocusNode = FocusNode();
-  final _form = GlobalKey<FormState>();
+  final _form2 = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -61,7 +60,7 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
   }
 
   Future<void> _submitForm() async {
-    final isValid = _form.currentState!.validate();
+    final isValid = _form2.currentState!.validate();
     if (!isValid) {
       return;
     }
@@ -70,37 +69,31 @@ class RegisterStoreFormState extends State<RegisterStoreForm> {
       _isLoading = true;
     });
 
-    _form.currentState!.save();
+    _form2.currentState!.save();
 
-    // try {
-    //   await Provider.of<DriverProvider>(context, listen: false).registerStore(
-    //    _initValue["name"],
-    // _initValue["address"],
-    // _initValue["longitude"],
-    // _initValue["latitude"],
-    // _initValue["contactNumber"],
-    // _initValue["timing"],
-    //   );
+    try {
+      await Provider.of<StoreProvider>(context, listen: false).registerStore(
+       _initValue["name"],
+        _initValue["contactNumber"],
+        _initValue["timing"],
+      );
 
-    //   Provider.of<UserProvider>(context, listen: false)
-    //       .appendTypeList(Type.driver);
+      await _showDialog("Store Registered Successfully");
 
-    //   await _showDialog("Store Registered Successfully");
-
-    //   Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
-    // } on DioError catch (e) {
-    //   await _showDialog(e.response!.data['message']);
-    // } finally {
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
-    // }
+      Navigator.of(context).pushReplacementNamed(StoreScreen.routeName);
+    } on DioError catch (e) {
+      await _showDialog(e.response!.data['message']);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Form(
-      key: _form,
+      key: _form2,
       child: ListView(
         children: [
           TextFormField(
