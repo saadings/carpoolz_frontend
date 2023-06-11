@@ -1,9 +1,15 @@
 // import 'package:dio/dio.dart';
+import 'package:carpoolz_frontend/providers/ride_requests_provider.dart';
+import 'package:carpoolz_frontend/widgets/ride_review.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/message.dart';
 import '../providers/user_provider.dart';
 import '../services/socket_services/socket_service.dart';
+import '../services/api_services/trip_service.dart';
+import '../screens/confirm_ride_screen.dart';
+import '../screens/start_ride_screen.dart';
 
 class ChatRoomProvider with ChangeNotifier {
   List<Message> _messages = [
@@ -24,9 +30,17 @@ class ChatRoomProvider with ChangeNotifier {
 
   List<Message> get messages => _messages;
   String get receiverName => _receiverName;
+  bool _startRide = false;
+
+  bool get startRide => _startRide;
 
   void addMessage(String userName, String text, Type userType) {
     _messages.insert(0, Message(userName, text, userType));
+    notifyListeners();
+  }
+
+  void clearMessages() {
+    _messages.clear();
     notifyListeners();
   }
 
@@ -84,5 +98,148 @@ class ChatRoomProvider with ChangeNotifier {
         data['user'] == "passenger" ? Type.passenger : Type.driver,
       );
     });
+  }
+
+  void startRideRequest() {
+    Socket socketService = Socket();
+    socketService.emit(
+      "$_receiverName/start-ride",
+      {
+        'userName': senderName,
+        'user': senderType == Type.passenger ? "passenger" : "driver",
+      },
+    );
+    _startRide = true;
+    notifyListeners();
+  }
+
+  void receiveStartRideRequest(BuildContext context) {
+    Socket socketService = Socket();
+    socketService.on("$senderName/start-ride", (data) async {
+      print(data);
+
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Ride Request Confirmation"),
+          content: Text("Do you want to confirm ride?"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+              child: Text("No"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // print(rideRequests[0].toString());
+                try {
+                  Socket socketService = Socket();
+                  socketService.emit(
+                    "$_receiverName/confirm-ride",
+                    {
+                      'userName': senderName,
+                      'user':
+                          senderType == Type.passenger ? "passenger" : "driver",
+                    },
+                  );
+                  _startRide = false;
+                  final _currentType =
+                      Provider.of<UserProvider>(context, listen: false)
+                          .currentType;
+
+                  if (_currentType == Type.passenger) {
+                    try {
+                      await TripService().startPassengerTrip(senderName);
+                    } catch (e) {
+                      print(e.toString());
+                    }
+                  }
+                  Navigator.of(context)
+                      .pushReplacementNamed(ConfirmRideScreen.routeName);
+                  // notifyListeners();
+                } catch (e) {
+                  print(e.toString());
+                } finally {
+                  // Navigator.of(context).pop();
+                }
+              },
+              child: Text("Yes"),
+            ),
+          ],
+        ),
+      );
+
+      // _startRide = false;
+      // notifyListeners();
+    });
+  }
+
+  void receiveConfirmRide(BuildContext context) {
+    Socket socketService = Socket();
+    socketService.on("$senderName/confirm-ride", (data) async {
+      print(data);
+      _startRide = false;
+      final _currentType =
+          Provider.of<UserProvider>(context, listen: false).currentType;
+
+      if (_currentType == Type.passenger) {
+        try {
+          await TripService().startPassengerTrip(senderName);
+        } catch (e) {
+          print(e.toString());
+        }
+      }
+
+      notifyListeners();
+    });
+  }
+
+  void receiveStartRide(BuildContext context) {
+    Socket socketService = Socket();
+    socketService.on("start-ride", (data) async {
+      print(data);
+      Navigator.of(context).pushReplacementNamed(StartRideScreen.routeName);
+
+      notifyListeners();
+    });
+  }
+
+  void sendStartRide() {
+    Socket socketService = Socket();
+    socketService.emit(
+      "start-ride",
+      {
+        'userName': senderName,
+        'user': senderType == Type.passenger ? "passenger" : "driver",
+      },
+    );
+  }
+
+  void receiveEndRide(BuildContext context) {
+    Socket socketService = Socket();
+    socketService.on("end-ride", (data) async {
+      print(data);
+      // Navigator.of(context).pushReplacementNamed(StartRideScreen.routeName);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return RideReview();
+        },
+      );
+
+      notifyListeners();
+    });
+  }
+
+  void sendEndRide() {
+    Socket socketService = Socket();
+    socketService.emit(
+      "end-ride",
+      {
+        'userName': senderName,
+        'user': senderType == Type.passenger ? "passenger" : "driver",
+      },
+    );
   }
 }

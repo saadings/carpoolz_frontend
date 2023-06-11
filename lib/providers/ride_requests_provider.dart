@@ -4,32 +4,8 @@ import '../services/socket_services/socket_service.dart';
 
 class RideRequestProvider with ChangeNotifier {
   String userName = "";
-  List<Map<String, dynamic>> _rideRequests = [
-    // {
-    //   "userName": "saaaadi16",
-    //   "origin": {
-    //     "longitude": {"\$numberDecimal": "74.4034771"},
-    //     "latitude": {"\$numberDecimal": "31.4859315"},
-    //     "_id": {"\$oid": "643a76fc4d00792c6b1db867"}
-    //   },
-    // },
-    // {
-    //   "userName": "Addullah",
-    //   "origin": {
-    //     "longitude": {"\$numberDecimal": "74.4034771"},
-    //     "latitude": {"\$numberDecimal": "31.4859315"},
-    //     "_id": {"\$oid": "643a76fc4d00792c6b1db867"}
-    //   },
-    // },
-    // {
-    //   "userName": "Laiba",
-    //   "origin": {
-    //     "longitude": {"\$numberDecimal": "74.4034771"},
-    //     "latitude": {"\$numberDecimal": "31.4859315"},
-    //     "_id": {"\$oid": "643a76fc4d00792c6b1db867"}
-    //   },
-    // },
-  ];
+  List<Map<String, dynamic>> _rideRequests = [];
+  List<bool> isEnabled = [];
   bool _requestingRide = false;
   RideRequestProvider({required this.userName});
 
@@ -40,10 +16,6 @@ class RideRequestProvider with ChangeNotifier {
   bool get requestingRide {
     return _requestingRide;
   }
-
-  // String get userName {
-  //   return userName;
-  // }
 
   void connectSocket() {
     Socket socketService = Socket();
@@ -63,6 +35,11 @@ class RideRequestProvider with ChangeNotifier {
     socketService.disconnect();
   }
 
+  void disableButton(int index) {
+    isEnabled[index] = false;
+    notifyListeners();
+  }
+
   void addRideRequest(Map<String, dynamic> rideRequest) {
     // print("ride req data: ${rideRequest}");
 
@@ -70,12 +47,19 @@ class RideRequestProvider with ChangeNotifier {
         (element) => element['userName'] == rideRequest['userName']);
     if (index == -1) {
       _rideRequests.add(rideRequest);
+
+      isEnabled.add(true);
       notifyListeners();
     }
 
     // _rideRequests.insert(index, rideRequest);
     // print(_rideRequests[0]);
     // notifyListeners();
+  }
+
+  void clearRideRequests() {
+    _rideRequests.clear();
+    notifyListeners();
   }
 
   void getRideRequests(String event) {

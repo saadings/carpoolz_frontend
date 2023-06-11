@@ -74,6 +74,7 @@ class _DraggableSheetState extends State<DraggableSheet> {
         },
       );
     }
+    // Navigator.of(context).pushNamed(RideRequestsScreen.routeName);
   }
 
   @override
@@ -143,47 +144,3 @@ class _DraggableSheetState extends State<DraggableSheet> {
     );
   }
 }
-
-// () async {
-//                     setState(() {
-//                       _loading = true;
-//                     });
-
-//                     try {
-//                       if (widget.isDriver) {
-//                         print(widget.isDriver);
-//                         await Provider.of<GoogleMapsProvider>(context,
-//                                 listen: false)
-//                             .findRidesDriver();
-//                       } else {
-//                         print(widget.isDriver);
-//                         await Provider.of<GoogleMapsProvider>(context,
-//                                 listen: false)
-//                             .findRidesPassenger();
-//                       }
-//                       Navigator.of(context)
-//                           .pushNamed(RideRequestsScreen.routeName);
-//                     } on DioError catch (e) {
-//                       showDialog(
-//                         context: context,
-//                         builder: (ctx) => AlertDialog(
-//                           title: Text("Something Went Wrong!"),
-//                           content: Text(e.response!.data['message'].toString()),
-//                           actions: [
-//                             TextButton(
-//                               onPressed: () {
-//                                 Navigator.of(ctx).pop();
-//                               },
-//                               child: Text("Okay"),
-//                             ),
-//                           ],
-//                         ),
-//                       );
-//                     } finally {
-//                       setState(
-//                         () {
-//                           _loading = false;
-//                         },
-//                       );
-//                     }
-//                   }

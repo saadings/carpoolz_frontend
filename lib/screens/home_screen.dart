@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/user_provider.dart';
 import '../providers/google_maps_provider.dart';
 import '../widgets/draggable_sheet.dart';
 import '../widgets/google_maps.dart';
@@ -17,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final String _userName =
+        Provider.of<UserProvider>(context, listen: false).userName;
     AppBar _appBar = AppBar(
       title: const Text(
         "Carpoolz",
@@ -25,18 +28,26 @@ class _HomeScreenState extends State<HomeScreen> {
       elevation: 5,
       // backgroundColor: Color.fromRGBO(156, 39, 176, 0.4),
       actions: [
-        InkWell(
-          onTap: () {},
-          // borderRadius: BorderRadius.circular(1000),
-          child: CircleAvatar(
-            child: Text(
-              "SN",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.purple,
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: InkWell(
+            customBorder: CircleBorder(),
+            // borderRadius: BorderRadius.circular(1000),
+            // decoration: BoxDecoration(
+            // shape: BoxShape.circle,
+            // ),
+            onTap: () {},
+            // borderRadius: BorderRadius.circular(1000),
+            child: CircleAvatar(
+              child: Text(
+                _userName[0].toUpperCase(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
+              backgroundColor: Color.fromARGB(255, 96, 125, 139),
             ),
-            backgroundColor: Colors.black87,
           ),
         ),
 

@@ -60,4 +60,34 @@ class RideService extends BaseService {
       rethrow;
     }
   }
+
+  Future<Response> deActiveDriver(String userName) async {
+    try {
+      return await dio.delete(
+        '/de-activate/driver',
+        data: {
+          'userName': userName,
+        },
+      );
+    } on DioError catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> deActivePassenger(String userName) async {
+    try {
+      return await dio.delete(
+        '/de-activate/passenger',
+        data: {
+          'userName': userName,
+        },
+      );
+    } on DioError catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

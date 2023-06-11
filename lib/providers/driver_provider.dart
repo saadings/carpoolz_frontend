@@ -6,12 +6,15 @@ class DriverProvider with ChangeNotifier {
   final userName;
   final cnic;
   final licenseNo;
+  var _startRide = false;
 
   DriverProvider({
     required this.userName,
     this.cnic,
     this.licenseNo,
   });
+
+  bool get startRide => _startRide;
 
   Future<void> registerDriver(String cnic, String licenseNo) async {
     try {
@@ -25,5 +28,10 @@ class DriverProvider with ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+  }
+
+  void startDriverRide() {
+    _startRide = true;
+    notifyListeners();
   }
 }
