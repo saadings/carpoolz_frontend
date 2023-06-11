@@ -4,9 +4,10 @@ class AuthContainer extends StatelessWidget {
   final String title;
   final Widget child;
 
-  AuthContainer({
-    @required this.title,
-    @required this.child,
+  const AuthContainer({
+    super.key,
+    required this.title,
+    required this.child,
   });
 
   @override
@@ -15,6 +16,7 @@ class AuthContainer extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        elevation: 15,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -38,7 +40,7 @@ class AuthContainer extends StatelessWidget {
             // const SizedBox(
             //   height: 5,
             // ),
-            Container(
+            SizedBox(
               height: deviceSize.height * 0.74,
               width: double.infinity,
               child: Padding(

@@ -1,25 +1,28 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
 import '../screens/register_screen.dart';
+import '../screens/home_screen.dart';
+import './small_loading.dart';
 
 class LoginForm extends StatefulWidget {
+  const LoginForm({Key? key}) : super(key: key);
+
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
-  var _initValue = {
+  final Map<String, dynamic> _initValue = {
     'userName': '',
     'password': '',
   };
-  Map<String, dynamic> _loginData = {
-    'userName': '',
-    'password': '',
-  };
-  var _passwordFocusNode = FocusNode();
-  var _buttonFocusNode = FocusNode();
+  var _isLoading = false;
+  var _obscurePassword = true;
+  final _passwordFocusNode = FocusNode();
+  final _buttonFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
 
   @override
@@ -29,16 +32,48 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
-  void _submitForm() {
-    final isValid = _form.currentState.validate();
+  Future<void> _showErrorDialog(String message) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("An Error Occurred!"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: const Text("Okay"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _submitForm() async {
+    final isValid = _form.currentState!.validate();
 
     if (!isValid) {
       return;
     }
+    setState(() {
+      _isLoading = true;
+    });
+    _form.currentState!.save();
 
-    _form.currentState.save();
-    Provider.of<UserProvider>(context, listen: false)
-        .login(_loginData['userName'], _loginData['password']);
+    try {
+      await Provider.of<UserProvider>(context, listen: false)
+          .login(_initValue['userName'], _initValue['password']);
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    } on DioError catch (e) {
+      await _showErrorDialog(e.response!.data['message']);
+    } catch (e) {
+      await _showErrorDialog(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -56,9 +91,9 @@ class _LoginFormState extends State<LoginForm> {
             onFieldSubmitted: (_) {
               FocusScope.of(context).requestFocus(_passwordFocusNode);
             },
-            onSaved: (newValue) => _loginData['userName'] = newValue,
+            onSaved: (newValue) => _initValue['userName'] = newValue,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter your username';
               }
               if (value.length < 8) {
@@ -68,18 +103,29 @@ class _LoginFormState extends State<LoginForm> {
             },
           ),
           TextFormField(
-            obscureText: true,
-            decoration: const InputDecoration(
+            obscureText: _obscurePassword,
+            decoration: InputDecoration(
               labelText: "Password",
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+                child: Icon(
+                  _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                  size: 20,
+                ),
+              ),
             ),
             initialValue: _initValue['password'],
             textInputAction: TextInputAction.done,
             focusNode: _passwordFocusNode,
             onFieldSubmitted: (_) {
-              _form.currentState.validate();
+              _form.currentState!.validate();
               FocusScope.of(context).requestFocus(_buttonFocusNode);
             },
-            onSaved: (newValue) => _loginData['password'] = newValue,
+            onSaved: (newValue) => _initValue['password'] = newValue,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your password';
@@ -111,11 +157,13 @@ class _LoginFormState extends State<LoginForm> {
             padding: EdgeInsets.symmetric(horizontal: deviceSize.width * 0.15),
             child: ElevatedButton(
               focusNode: _buttonFocusNode,
-              onPressed: _submitForm,
-              child: Text(
-                "Login",
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              onPressed: _isLoading ? null : _submitForm,
+              child: _isLoading
+                  ? const SmallLoading()
+                  : Text(
+                      "Login",
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
             ),
           ),
           const SizedBox(
@@ -129,7 +177,7 @@ class _LoginFormState extends State<LoginForm> {
                 "Don't have an account?",
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 1,
               ),
               TextButton(

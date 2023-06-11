@@ -4,10 +4,12 @@ import '../widgets/auth_container.dart';
 import '../widgets/register_form.dart';
 
 class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
+
   static const String routeName = '/register';
 
   @override
   Widget build(BuildContext context) {
-    return AuthContainer(title: "Register", child: RegisterForm());
+    return const AuthContainer(title: "Register", child: RegisterForm());
   }
 }
