@@ -1,3 +1,4 @@
+import 'package:carpoolz_frontend/providers/store_list_provider.dart';
 import 'package:carpoolz_frontend/providers/store_provider.dart';
 import 'package:carpoolz_frontend/providers/vendor_provider.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<UserProvider, StoreProvider>(
           create: (_) => StoreProvider(userName: ""),
           update: (ctx, user, previousState) => StoreProvider(
+            userName: user.userName,
+          ),
+        ),
+         ChangeNotifierProxyProvider<UserProvider, StoreListProvider>(
+          create: (_) => StoreListProvider(userName: ""),
+          update: (ctx, user, previousState) => StoreListProvider(
             userName: user.userName,
           ),
         ),

@@ -39,11 +39,5 @@ class StoreProvider with ChangeNotifier {
     }
   }
 
-  Future<Response> getStoreDetails() async {
-    try {
-      return await StoreService().getStoreDetails(userName.toLowerCase());
-    } catch (e) {
-      rethrow;
-    }
-  }
+  
 }
