@@ -21,7 +21,34 @@ class StoreService extends BaseService {
         "latitude": latLng.latitude,
         "contactNumber": contactNumber,
         "timing": timing,
+      });
+    } on DioError catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
+  Future<Response> getStoreDetails(String userName) async {
+    try {
+      return await dio.post('/stores/all', data: {
+        "userName": userName,
+      });
+    } on DioError catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Response> addStoreDeals(
+      String storeID, String title, String description, double price) async {
+    try {
+      return await dio.post('/stores/deals/add', data: {
+        "storeID": storeID,
+        "title": title,
+        "description": description,
+        "price": price,
       });
     } on DioError catch (_) {
       rethrow;
